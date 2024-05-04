@@ -2,7 +2,7 @@ package org.biwaby.studytracker.utils.MapperUtils;
 
 import lombok.RequiredArgsConstructor;
 import org.biwaby.studytracker.models.*;
-import org.biwaby.studytracker.models.DTO.TimetableDTO;
+import org.biwaby.studytracker.models.DTO.TimetableItemDTO;
 import org.biwaby.studytracker.repositories.ClassTypeRepo;
 import org.biwaby.studytracker.repositories.ClassroomRepo;
 import org.biwaby.studytracker.repositories.SubjectRepo;
@@ -15,15 +15,15 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class TimetableMapper {
+public class TimetableItemMapper {
 
     private final SubjectRepo subjectRepo;
     private final TeacherRepo teacherRepo;
     private final ClassTypeRepo classTypeRepo;
     private final ClassroomRepo classroomRepo;
 
-    public TimetableDTO mapToTimetableDTO(Timetable timetable) {
-        TimetableDTO dto = new TimetableDTO();
+    public TimetableItemDTO mapToTimetableDTO(TimetableItem timetable) {
+        TimetableItemDTO dto = new TimetableItemDTO();
         dto.setSubjectId(timetable.getSubject().getId());
         dto.setTeacherId(timetable.getTeacher().getId());
         dto.setClassTypeId(timetable.getClassType().getId());
@@ -34,8 +34,8 @@ public class TimetableMapper {
         return dto;
     }
 
-    public Timetable mapToTimetableEntity(TimetableDTO dto) throws ParseException {
-        Timetable timetable = new Timetable();
+    public TimetableItem mapToTimetableEntity(TimetableItemDTO dto) throws ParseException {
+        TimetableItem timetable = new TimetableItem();
 
         Optional<Subject> optionalSubject = subjectRepo.findById(dto.getSubjectId());
         Optional<Teacher> optionalTeacher = teacherRepo.findById(dto.getTeacherId());

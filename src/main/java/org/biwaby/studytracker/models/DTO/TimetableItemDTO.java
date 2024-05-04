@@ -4,7 +4,7 @@ import lombok.Data;
 
 
 @Data
-public class TimetableDTO {
+public class TimetableItemDTO {
 
     private Long id;
     private Long subjectId;

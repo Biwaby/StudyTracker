@@ -15,7 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity(name = "timetable")
 @Table(name = "timetable")
-public class Timetable {
+public class TimetableItem {
 
     @Id
     @Column(name = "id")

@@ -1,2 +1,18 @@
-package org.biwaby.studytracker.services.interfaces;public interface BuildingService {
+package org.biwaby.studytracker.services.interfaces;
+
+import org.biwaby.studytracker.models.Building;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public interface BuildingService {
+
+    Building addBuilding(Building building);
+
+    List<Building> getAllBuildings();
+
+    boolean deleteBuilding(Long id);
+
+    boolean editBuilding(Long id, Building building);
 }

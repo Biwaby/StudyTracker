@@ -11,12 +11,12 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class BuildingMapper {
+public class ClassroomMapper {
 
     private final BuildingRepo buildingRepo;
+
     public ClassroomDTO mapToClassroomDTO(Classroom classroom) {
         ClassroomDTO dto = new ClassroomDTO();
-        dto.setId(classroom.getId());
         dto.setBuildingId(classroom.getBuilding().getId());
         dto.setNumber(classroom.getNumber());
         return dto;
@@ -24,7 +24,6 @@ public class BuildingMapper {
 
     public Classroom mapToClassroomEntity(ClassroomDTO dto) {
         Classroom classroom = new Classroom();
-        classroom.setId(dto.getId());
 
         Optional<Building> optionalBuilding = buildingRepo.findById(dto.getBuildingId());
         if (optionalBuilding.isPresent()){

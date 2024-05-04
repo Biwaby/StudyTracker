@@ -1,2 +1,19 @@
-package org.biwaby.studytracker.services.interfaces;public interface ClassroomService {
+package org.biwaby.studytracker.services.interfaces;
+
+import org.biwaby.studytracker.models.Classroom;
+import org.biwaby.studytracker.models.DTO.ClassroomDTO;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public interface ClassroomService {
+
+    Classroom addClassroom(ClassroomDTO dto);
+
+    List<Classroom> getALlClassrooms();
+
+    boolean deleteClassroom(Long id);
+
+    boolean editClassroom(Long id, ClassroomDTO dto);
 }

@@ -1,7 +1,7 @@
 package org.biwaby.studytracker.repositories;
 
-import org.biwaby.studytracker.models.Timetable;
+import org.biwaby.studytracker.models.TimetableItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TimetableRepo extends JpaRepository<Timetable, Long> {
+public interface TimetableItemRepo extends JpaRepository<TimetableItem, Long> {
 }
