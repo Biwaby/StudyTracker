@@ -1,0 +1,391 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1714846121001-1
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: building_seq
+            startValue: 1
+  - changeSet:
+      id: 1714846121001-2
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: class_type_seq
+            startValue: 1
+  - changeSet:
+      id: 1714846121001-3
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: classmate_seq
+            startValue: 1
+  - changeSet:
+      id: 1714846121001-4
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: classroom_seq
+            startValue: 1
+  - changeSet:
+      id: 1714846121001-5
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: subject_seq
+            startValue: 1
+  - changeSet:
+      id: 1714846121001-6
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: task_seq
+            startValue: 1
+  - changeSet:
+      id: 1714846121001-7
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: teacher_seq
+            startValue: 1
+  - changeSet:
+      id: 1714846121001-8
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: timer_note_seq
+            startValue: 1
+  - changeSet:
+      id: 1714846121001-9
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: timetable_seq
+            startValue: 1
+  - changeSet:
+      id: 1714846121001-10
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_buildings
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+            tableName: buildings
+  - changeSet:
+      id: 1714846121001-11
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_class_types
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: type
+                  type: VARCHAR(255)
+            tableName: class_types
+  - changeSet:
+      id: 1714846121001-12
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_classmates
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  name: patronymic
+                  type: VARCHAR(255)
+            tableName: classmates
+  - changeSet:
+      id: 1714846121001-13
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_classrooms
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: building_id
+                  type: BIGINT
+              - column:
+                  name: number
+                  type: VARCHAR(255)
+            tableName: classrooms
+  - changeSet:
+      id: 1714846121001-14
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_subjects
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+              - column:
+                  name: course
+                  type: INT
+              - column:
+                  name: semester
+                  type: INT
+            tableName: subjects
+  - changeSet:
+      id: 1714846121001-15
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tasks
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: title
+                  type: TEXT
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: subject_id
+                  type: BIGINT
+              - column:
+                  name: status
+                  type: BOOLEAN
+              - column:
+                  name: deadline_date
+                  type: DATETIME
+            tableName: tasks
+  - changeSet:
+      id: 1714846121001-16
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_teachers
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  name: patronymic
+                  type: VARCHAR(255)
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+            tableName: teachers
+  - changeSet:
+      id: 1714846121001-17
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_timernotes
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: subject_id
+                  type: BIGINT
+              - column:
+                  name: date
+                  type: DATETIME
+              - column:
+                  name: duration
+                  type: VARCHAR(255)
+            tableName: timer_notes
+  - changeSet:
+      id: 1714846121001-18
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_timetable
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: subject_id
+                  type: BIGINT
+              - column:
+                  name: teacher_id
+                  type: BIGINT
+              - column:
+                  name: class_type_id
+                  type: BIGINT
+              - column:
+                  name: classroom_id
+                  type: BIGINT
+              - column:
+                  name: date
+                  type: DATETIME
+              - column:
+                  name: begin_time
+                  type: DATETIME
+              - column:
+                  name: end_time
+                  type: DATETIME
+            tableName: timetable
+  - changeSet:
+      id: 1714846121001-19
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: subject_id
+            constraintName: uc_timernotes_subject
+            tableName: timer_notes
+  - changeSet:
+      id: 1714846121001-20
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: building_id
+            baseTableName: classrooms
+            constraintName: FK_CLASSROOMS_ON_BUILDING
+            referencedColumnNames: id
+            referencedTableName: buildings
+  - changeSet:
+      id: 1714846121001-21
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: subject_id
+            baseTableName: tasks
+            constraintName: FK_TASKS_ON_SUBJECT
+            referencedColumnNames: id
+            referencedTableName: subjects
+  - changeSet:
+      id: 1714846121001-22
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: subject_id
+            baseTableName: timer_notes
+            constraintName: FK_TIMERNOTES_ON_SUBJECT
+            referencedColumnNames: id
+            referencedTableName: subjects
+  - changeSet:
+      id: 1714846121001-23
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: classroom_id
+            baseTableName: timetable
+            constraintName: FK_TIMETABLE_ON_CLASSROOM
+            referencedColumnNames: id
+            referencedTableName: classrooms
+  - changeSet:
+      id: 1714846121001-24
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: class_type_id
+            baseTableName: timetable
+            constraintName: FK_TIMETABLE_ON_CLASSTYPE
+            referencedColumnNames: id
+            referencedTableName: class_types
+  - changeSet:
+      id: 1714846121001-25
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: subject_id
+            baseTableName: timetable
+            constraintName: FK_TIMETABLE_ON_SUBJECT
+            referencedColumnNames: id
+            referencedTableName: subjects
+  - changeSet:
+      id: 1714846121001-26
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: teacher_id
+            baseTableName: timetable
+            constraintName: FK_TIMETABLE_ON_TEACHER
+            referencedColumnNames: id
+            referencedTableName: teachers
+
