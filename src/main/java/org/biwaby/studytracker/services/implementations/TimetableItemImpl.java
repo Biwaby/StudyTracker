@@ -21,7 +21,7 @@ public class TimetableItemImpl implements TimetableItemService {
 
     @Override
     public TimetableItem addItemInTimetable(TimetableItemDTO dto) throws ParseException {
-        return timetableItemRepo.saveAndFlush(mapper.mapToTimetableEntity(dto));
+        return timetableItemRepo.saveAndFlush(mapper.toEntity(dto));
     }
 
     @Override
@@ -46,14 +46,7 @@ public class TimetableItemImpl implements TimetableItemService {
         Optional<TimetableItem> editableTimetableItem = timetableItemRepo.findById(id);
         if (editableTimetableItem.isPresent()) {
             TimetableItem newTimetableItem = editableTimetableItem.get();
-            TimetableItem mappedTimetableItem = mapper.mapToTimetableEntity(dto);
-            newTimetableItem.setSubject(mappedTimetableItem.getSubject());
-            newTimetableItem.setTeacher(mappedTimetableItem.getTeacher());
-            newTimetableItem.setClassType(mappedTimetableItem.getClassType());
-            newTimetableItem.setClassroom(mappedTimetableItem.getClassroom());
-            newTimetableItem.setDate(mappedTimetableItem.getDate());
-            newTimetableItem.setBeginTime(mappedTimetableItem.getBeginTime());
-            newTimetableItem.setEndTime(mappedTimetableItem.getEndTime());
+            mapper.updateDataFromDTO(newTimetableItem, dto);
             timetableItemRepo.save(newTimetableItem);
             return true;
         }

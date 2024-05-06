@@ -15,16 +15,15 @@ public class ClassroomMapper {
 
     private final BuildingRepo buildingRepo;
 
-    public ClassroomDTO mapToClassroomDTO(Classroom classroom) {
+    public ClassroomDTO toDTO(Classroom classroom) {
         ClassroomDTO dto = new ClassroomDTO();
         dto.setBuildingId(classroom.getBuilding().getId());
         dto.setNumber(classroom.getNumber());
         return dto;
     }
 
-    public Classroom mapToClassroomEntity(ClassroomDTO dto) {
+    public Classroom toEntity(ClassroomDTO dto) {
         Classroom classroom = new Classroom();
-
         Optional<Building> optionalBuilding = buildingRepo.findById(dto.getBuildingId());
         if (optionalBuilding.isPresent()){
             classroom.setBuilding(optionalBuilding.get());
@@ -34,5 +33,18 @@ public class ClassroomMapper {
         }
         classroom.setNumber(dto.getNumber());
         return classroom;
+    }
+
+    public void updateDataFromDTO(Classroom classroom, ClassroomDTO dto) {
+        if (dto == null) {
+            return;
+        }
+        if (dto.getBuildingId() != null) {
+            Optional<Building> optionalBuilding = buildingRepo.findById(dto.getBuildingId());
+            optionalBuilding.ifPresent(classroom::setBuilding);
+        }
+        if (dto.getNumber() != null) {
+            classroom.setNumber(dto.getNumber());
+        }
     }
 }

@@ -22,7 +22,7 @@ public class TimetableItemMapper {
     private final ClassTypeRepo classTypeRepo;
     private final ClassroomRepo classroomRepo;
 
-    public TimetableItemDTO mapToTimetableDTO(TimetableItem timetable) {
+    public TimetableItemDTO toDTO(TimetableItem timetable) {
         TimetableItemDTO dto = new TimetableItemDTO();
         dto.setSubjectId(timetable.getSubject().getId());
         dto.setTeacherId(timetable.getTeacher().getId());
@@ -34,7 +34,7 @@ public class TimetableItemMapper {
         return dto;
     }
 
-    public TimetableItem mapToTimetableEntity(TimetableItemDTO dto) throws ParseException {
+    public TimetableItem toEntity(TimetableItemDTO dto) throws ParseException {
         TimetableItem timetable = new TimetableItem();
 
         Optional<Subject> optionalSubject = subjectRepo.findById(dto.getSubjectId());
@@ -58,5 +58,36 @@ public class TimetableItemMapper {
         timetable.setBeginTime(new SimpleDateFormat("HH:mm").parse(dto.getBeginTime()));
         timetable.setEndTime(new SimpleDateFormat("HH:mm").parse(dto.getEndTime()));
         return timetable;
+    }
+
+    public void updateDataFromDTO(TimetableItem timetableItem, TimetableItemDTO dto) throws ParseException {
+        if (dto == null) {
+            return;
+        }
+        if (dto.getSubjectId() != null) {
+            Optional<Subject> optionalSubject = subjectRepo.findById(dto.getSubjectId());
+            optionalSubject.ifPresent(timetableItem::setSubject);
+        }
+        if (dto.getTeacherId() != null) {
+            Optional<Teacher> optionalTeacher = teacherRepo.findById(dto.getTeacherId());
+            optionalTeacher.ifPresent(timetableItem::setTeacher);
+        }
+        if (dto.getClassTypeId() != null) {
+            Optional<ClassType> optionalClassType = classTypeRepo.findById(dto.getClassTypeId());
+            optionalClassType.ifPresent(timetableItem::setClassType);
+        }
+        if (dto.getClassroomId() != null) {
+            Optional<Classroom> optionalClassroom = classroomRepo.findById(dto.getClassroomId());
+            optionalClassroom.ifPresent(timetableItem::setClassroom);
+        }
+        if (dto.getDate() != null) {
+            timetableItem.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(dto.getDate()));
+        }
+        if (dto.getBeginTime() != null) {
+            timetableItem.setBeginTime(new SimpleDateFormat("HH:mm").parse(dto.getBeginTime()));
+        }
+        if (dto.getEndTime() != null) {
+            timetableItem.setEndTime(new SimpleDateFormat("HH:mm").parse(dto.getEndTime()));
+        }
     }
 }

@@ -22,7 +22,7 @@ public class TimerNoteServiceImpl implements TimerNoteService {
     @Override
     public TimerNote addTimerNote(TimerNoteDTO dto) {
         dto.setDate(new Date());
-        return timerNoteRepo.saveAndFlush(mapper.mapToTimerNoteEntity(dto));
+        return timerNoteRepo.saveAndFlush(mapper.toEntity(dto));
     }
 
     @Override
@@ -47,10 +47,7 @@ public class TimerNoteServiceImpl implements TimerNoteService {
         Optional<TimerNote> editableTimerNote = timerNoteRepo.findById(id);
         if (editableTimerNote.isPresent()) {
             TimerNote newTimerNote = editableTimerNote.get();
-            TimerNote mappedTimerNote = mapper.mapToTimerNoteEntity(dto);
-            newTimerNote.setSubject(mappedTimerNote.getSubject());
-            newTimerNote.setDate(new Date());
-            newTimerNote.setDuration(mappedTimerNote.getDuration());
+            mapper.updateDataFromDTO(newTimerNote, dto);
             timerNoteRepo.save(newTimerNote);
             return true;
         }

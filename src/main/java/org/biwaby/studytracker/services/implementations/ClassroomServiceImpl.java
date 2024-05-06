@@ -20,7 +20,7 @@ public class ClassroomServiceImpl implements ClassroomService {
 
     @Override
     public Classroom addClassroom(ClassroomDTO dto) {
-        return classroomRepo.saveAndFlush(mapper.mapToClassroomEntity(dto));
+        return classroomRepo.saveAndFlush(mapper.toEntity(dto));
     }
 
     @Override
@@ -45,9 +45,7 @@ public class ClassroomServiceImpl implements ClassroomService {
         Optional<Classroom> editableClassroom = classroomRepo.findById(id);
         if (editableClassroom.isPresent()) {
             Classroom newClassroom = editableClassroom.get();
-            Classroom mappedClassroom = mapper.mapToClassroomEntity(dto);
-            newClassroom.setBuilding(mappedClassroom.getBuilding());
-            newClassroom.setNumber(mappedClassroom.getNumber());
+            mapper.updateDataFromDTO(newClassroom, dto);
             classroomRepo.save(newClassroom);
             return true;
         }

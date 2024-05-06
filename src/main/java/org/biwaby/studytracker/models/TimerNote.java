@@ -1,5 +1,6 @@
 package org.biwaby.studytracker.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.Date;
@@ -23,6 +24,7 @@ public class TimerNote {
     @JoinColumn(name = "subject_id")
     private Subject subject;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "Europe/Moscow")
     @Column(name = "date")
     private Date date;
 

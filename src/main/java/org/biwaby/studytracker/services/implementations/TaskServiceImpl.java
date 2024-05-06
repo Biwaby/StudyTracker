@@ -21,7 +21,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task addTask(TaskDTO dto) throws ParseException {
-        return taskRepo.saveAndFlush(mapper.mapToTaskEntity(dto));
+        return taskRepo.saveAndFlush(mapper.toEntity(dto));
     }
 
     @Override
@@ -46,12 +46,7 @@ public class TaskServiceImpl implements TaskService {
         Optional<Task> editableTask = taskRepo.findById(id);
         if (editableTask.isPresent()) {
             Task newTask = editableTask.get();
-            Task mappedTask = mapper.mapToTaskEntity(dto);
-            newTask.setTitle(mappedTask.getTitle());
-            newTask.setDescription(mappedTask.getDescription());
-            newTask.setSubject(mappedTask.getSubject());
-            newTask.setStatus(mappedTask.isStatus());
-            newTask.setDeadlineDate(mappedTask.getDeadlineDate());
+            mapper.updateDataFromDTO(newTask, dto);
             taskRepo.save(newTask);
             return true;
         }

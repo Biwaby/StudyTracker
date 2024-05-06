@@ -17,7 +17,7 @@ public class TaskMapper {
 
     private final SubjectRepo subjectRepo;
 
-    public TaskDTO mapToTaskDTO(Task task) {
+    public TaskDTO toDTO(Task task) {
         TaskDTO dto = new TaskDTO();
         dto.setTitle(task.getTitle());
         dto.setDescription(task.getDescription());
@@ -27,11 +27,10 @@ public class TaskMapper {
         return dto;
     }
 
-    public Task mapToTaskEntity(TaskDTO dto) throws ParseException {
+    public Task toEntity(TaskDTO dto) throws ParseException {
         Task task = new Task();
         task.setTitle(dto.getTitle());
         task.setDescription(dto.getDescription());
-
         Optional<Subject> optionalSubject = subjectRepo.findById(dto.getSubjectId());
         if (optionalSubject.isPresent()) {
             task.setSubject(optionalSubject.get());
@@ -42,5 +41,24 @@ public class TaskMapper {
         task.setStatus(dto.isStatus());
         task.setDeadlineDate(new SimpleDateFormat("dd-MM-yyyy").parse(dto.getDeadlineDate()));
         return task;
+    }
+
+    public void updateDataFromDTO(Task task, TaskDTO dto) throws ParseException {
+        if (dto == null) {
+            return;
+        }
+        if (dto.getTitle() != null) {
+            task.setTitle(dto.getTitle());
+        }
+        if (dto.getDescription() != null) {
+            task.setDescription(dto.getDescription());
+        }
+        if (dto.getSubjectId() != null) {
+            Optional<Subject> optionalSubject = subjectRepo.findById(dto.getSubjectId());
+            optionalSubject.ifPresent(task::setSubject);
+        }
+        if (dto.getDeadlineDate() != null) {
+            task.setDeadlineDate(new SimpleDateFormat("dd-MM-yyyy").parse(dto.getDeadlineDate()));
+        }
     }
 }
