@@ -35,6 +35,9 @@ public class TimetableItem {
     @JoinColumn(name = "classType_id")
     private ClassType classType;
 
+    @Column(name = "visit_status")
+    private String visitStatus;
+
     @ManyToOne
     @JoinColumn(name = "classroom_id")
     private Classroom classroom;

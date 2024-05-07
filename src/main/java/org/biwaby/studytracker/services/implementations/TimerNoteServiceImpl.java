@@ -1,6 +1,7 @@
 package org.biwaby.studytracker.services.implementations;
 
 import lombok.RequiredArgsConstructor;
+import org.biwaby.studytracker.exceptions.TimerNoteAlreadyExistsException;
 import org.biwaby.studytracker.models.DTO.TimerNoteDTO;
 import org.biwaby.studytracker.models.TimerNote;
 import org.biwaby.studytracker.repositories.TimerNoteRepo;
@@ -21,8 +22,14 @@ public class TimerNoteServiceImpl implements TimerNoteService {
 
     @Override
     public TimerNote addTimerNote(TimerNoteDTO dto) {
-        dto.setDate(new Date());
-        return timerNoteRepo.saveAndFlush(mapper.toEntity(dto));
+        Optional<TimerNote> optionalTimerNote = timerNoteRepo.findBySubjectId(dto.getSubjectId());
+        if (optionalTimerNote.isPresent()) {
+            throw new TimerNoteAlreadyExistsException();
+        }
+        else {
+            dto.setDate(new Date());
+            return timerNoteRepo.saveAndFlush(mapper.toEntity(dto));
+        }
     }
 
     @Override

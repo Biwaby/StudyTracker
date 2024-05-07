@@ -27,6 +27,10 @@ public class TimetableItemMapper {
         dto.setSubjectId(timetable.getSubject().getId());
         dto.setTeacherId(timetable.getTeacher().getId());
         dto.setClassTypeId(timetable.getClassType().getId());
+
+        if (timetable.getVisitStatus().equals("Очное")) { dto.setVisitStatus(true); }
+        else if (timetable.getVisitStatus().equals("Дистанционное")) { dto.setVisitStatus(false); }
+
         dto.setClassroomId(timetable.getClassroom().getId());
         dto.setDate(new SimpleDateFormat("dd-MM-yyyy").format(timetable.getDate()));
         dto.setBeginTime(new SimpleDateFormat("HH:mm").format(timetable.getBeginTime()));
@@ -35,29 +39,35 @@ public class TimetableItemMapper {
     }
 
     public TimetableItem toEntity(TimetableItemDTO dto) throws ParseException {
-        TimetableItem timetable = new TimetableItem();
+        TimetableItem timetableItem = new TimetableItem();
 
         Optional<Subject> optionalSubject = subjectRepo.findById(dto.getSubjectId());
         Optional<Teacher> optionalTeacher = teacherRepo.findById(dto.getTeacherId());
         Optional<ClassType> optionalClassType = classTypeRepo.findById(dto.getClassTypeId());
         Optional<Classroom> optionalClassroom = classroomRepo.findById(dto.getClassroomId());
+        if (optionalSubject.isPresent()) { timetableItem.setSubject(optionalSubject.get()); }
+        else { timetableItem.setSubject(null); }
 
-        if (optionalSubject.isPresent()) { timetable.setSubject(optionalSubject.get()); }
-        else { timetable.setSubject(null); }
+        if (optionalTeacher.isPresent()) { timetableItem.setTeacher(optionalTeacher.get()); }
+        else { timetableItem.setTeacher(null); }
 
-        if (optionalTeacher.isPresent()) { timetable.setTeacher(optionalTeacher.get()); }
-        else { timetable.setTeacher(null); }
+        if (optionalClassType.isPresent()) { timetableItem.setClassType(optionalClassType.get()); }
+        else { timetableItem.setClassType(null); }
 
-        if (optionalClassType.isPresent()) { timetable.setClassType(optionalClassType.get()); }
-        else { timetable.setClassType(null); }
+        if (dto.isVisitStatus()) {
+            timetableItem.setVisitStatus("Очное");
+            if (optionalClassroom.isPresent()) { timetableItem.setClassroom(optionalClassroom.get()); }
+            else { timetableItem.setClassroom(null); }
+        }
+        else {
+            timetableItem.setVisitStatus("Дистанционное");
+            timetableItem.setClassroom(null);
+        }
 
-        if (optionalClassroom.isPresent()) { timetable.setClassroom(optionalClassroom.get()); }
-        else { timetable.setClassroom(null); }
-
-        timetable.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(dto.getDate()));
-        timetable.setBeginTime(new SimpleDateFormat("HH:mm").parse(dto.getBeginTime()));
-        timetable.setEndTime(new SimpleDateFormat("HH:mm").parse(dto.getEndTime()));
-        return timetable;
+        timetableItem.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(dto.getDate()));
+        timetableItem.setBeginTime(new SimpleDateFormat("HH:mm").parse(dto.getBeginTime()));
+        timetableItem.setEndTime(new SimpleDateFormat("HH:mm").parse(dto.getEndTime()));
+        return timetableItem;
     }
 
     public void updateDataFromDTO(TimetableItem timetableItem, TimetableItemDTO dto) throws ParseException {
@@ -75,6 +85,12 @@ public class TimetableItemMapper {
         if (dto.getClassTypeId() != null) {
             Optional<ClassType> optionalClassType = classTypeRepo.findById(dto.getClassTypeId());
             optionalClassType.ifPresent(timetableItem::setClassType);
+        }
+        if (dto.isVisitStatus()) {
+            timetableItem.setVisitStatus("Очное");
+        }
+        else {
+            timetableItem.setVisitStatus("Дистанционное");
         }
         if (dto.getClassroomId() != null) {
             Optional<Classroom> optionalClassroom = classroomRepo.findById(dto.getClassroomId());
