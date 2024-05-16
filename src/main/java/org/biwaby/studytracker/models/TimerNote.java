@@ -20,6 +20,10 @@ public class TimerNote {
     @SequenceGenerator(sequenceName = "timerNotes_seq", name = "timerNotes_seq", allocationSize = 1)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @OneToOne
     @JoinColumn(name = "subject_id")
     private Subject subject;

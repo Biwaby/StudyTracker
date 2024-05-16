@@ -4,9 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.biwaby.studytracker.models.DTO.TimerNoteDTO;
 import org.biwaby.studytracker.models.Subject;
 import org.biwaby.studytracker.models.TimerNote;
+import org.biwaby.studytracker.models.User;
 import org.biwaby.studytracker.repositories.SubjectRepo;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Optional;
 
 @Service
@@ -18,13 +22,15 @@ public class TimerNoteMapper {
     public TimerNoteDTO toDTO(TimerNote timerNote) {
         TimerNoteDTO dto = new TimerNoteDTO();
         dto.setSubjectId(timerNote.getSubject().getId());
-        dto.setDate(timerNote.getDate());
+        dto.setDate(new SimpleDateFormat("dd-MM-yyyy").format(timerNote.getDate()));
         dto.setDuration(timerNote.getDuration());
         return dto;
     }
 
-    public TimerNote toEntity(TimerNoteDTO dto) {
+    public TimerNote toEntity(TimerNoteDTO dto) throws ParseException {
         TimerNote timerNote = new TimerNote();
+
+        timerNote.setUser((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         Optional<Subject> optionalSubject = subjectRepo.findById(dto.getSubjectId());
         if (optionalSubject.isPresent()) {
             timerNote.setSubject(optionalSubject.get());
@@ -32,12 +38,12 @@ public class TimerNoteMapper {
         else {
             timerNote.setSubject(null);
         }
-        timerNote.setDate(dto.getDate());
+        timerNote.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(dto.getDate()));
         timerNote.setDuration(dto.getDuration());
         return timerNote;
     }
 
-    public void updateDataFromDTO(TimerNote timerNote, TimerNoteDTO dto) {
+    public void updateDataFromDTO(TimerNote timerNote, TimerNoteDTO dto) throws ParseException {
         if (dto == null) {
             return;
         }
@@ -46,7 +52,7 @@ public class TimerNoteMapper {
             optionalSubject.ifPresent(timerNote::setSubject);
         }
         if (dto.getDate() != null) {
-            timerNote.setDate(dto.getDate());
+            timerNote.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(dto.getDate()));
         }
         if (dto.getDuration() != null) {
             timerNote.setDuration(dto.getDuration());

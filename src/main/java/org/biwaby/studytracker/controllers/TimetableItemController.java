@@ -2,6 +2,7 @@ package org.biwaby.studytracker.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.biwaby.studytracker.models.DTO.TimetableItemDTO;
+import org.biwaby.studytracker.models.DTO.ViewDTO.TimetableDTO;
 import org.biwaby.studytracker.models.TimetableItem;
 import org.biwaby.studytracker.services.interfaces.TimetableItemService;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +19,12 @@ public class TimetableItemController {
     private final TimetableItemService timetableItemService;
 
     @PostMapping
-    ResponseEntity<TimetableItem> addItemToTimetable(@RequestBody TimetableItemDTO dto) throws ParseException {
+    ResponseEntity<TimetableDTO> addItemToTimetable(@RequestBody TimetableItemDTO dto) throws ParseException {
         return ResponseEntity.ok(timetableItemService.addItemInTimetable(dto));
     }
 
     @GetMapping
-    ResponseEntity<List<TimetableItem>> getAllItemsFromTimetable() {
+    ResponseEntity<List<TimetableDTO>> getAllItemsFromTimetable() {
         return ResponseEntity.ok(timetableItemService.getAllItemsFromTimetable());
     }
 

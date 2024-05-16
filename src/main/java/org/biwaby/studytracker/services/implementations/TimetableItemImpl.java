@@ -2,15 +2,17 @@ package org.biwaby.studytracker.services.implementations;
 
 import lombok.RequiredArgsConstructor;
 import org.biwaby.studytracker.models.DTO.TimetableItemDTO;
+import org.biwaby.studytracker.models.DTO.ViewDTO.TimetableDTO;
 import org.biwaby.studytracker.models.TimetableItem;
 import org.biwaby.studytracker.repositories.TimetableItemRepo;
 import org.biwaby.studytracker.services.interfaces.TimetableItemService;
+import org.biwaby.studytracker.utils.MapperUtils.PresentationMappers.TimetableMapper;
+import org.biwaby.studytracker.utils.MapperUtils.TimetableComparator;
 import org.biwaby.studytracker.utils.MapperUtils.TimetableItemMapper;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -18,15 +20,22 @@ public class TimetableItemImpl implements TimetableItemService {
 
     private final TimetableItemRepo timetableItemRepo;
     private final TimetableItemMapper mapper;
+    private final TimetableMapper timetableMapper;
 
     @Override
-    public TimetableItem addItemInTimetable(TimetableItemDTO dto) throws ParseException {
-        return timetableItemRepo.saveAndFlush(mapper.toEntity(dto));
+    public TimetableDTO addItemInTimetable(TimetableItemDTO dto) throws ParseException {
+        TimetableItem item = mapper.toEntity(dto);
+        timetableItemRepo.save(item);
+        return timetableMapper.toDTO(item);
     }
 
     @Override
-    public List<TimetableItem> getAllItemsFromTimetable() {
-        return timetableItemRepo.findAll();
+    public List<TimetableDTO> getAllItemsFromTimetable() {
+        List<TimetableItem> timetable = timetableItemRepo.findAll();
+        List<TimetableDTO> dtos = new ArrayList<>();
+        timetable.sort(new TimetableComparator());
+        timetable.forEach(obj -> dtos.add(timetableMapper.toDTO(obj)));
+        return dtos;
     }
 
     @Override

@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1715067437760-1
+      id: 1715553576368-1
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -9,7 +9,7 @@ databaseChangeLog:
             sequenceName: building_seq
             startValue: 1
   - changeSet:
-      id: 1715067437760-2
+      id: 1715553576368-2
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -18,16 +18,7 @@ databaseChangeLog:
             sequenceName: class_type_seq
             startValue: 1
   - changeSet:
-      id: 1715067437760-3
-      author: Biwaby (generated)
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - createSequence:
-            incrementBy: 1
-            sequenceName: classmate_seq
-            startValue: 1
-  - changeSet:
-      id: 1715067437760-4
+      id: 1715553576368-3
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -36,7 +27,7 @@ databaseChangeLog:
             sequenceName: classroom_seq
             startValue: 1
   - changeSet:
-      id: 1715067437760-5
+      id: 1715553576368-4
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -45,7 +36,7 @@ databaseChangeLog:
             sequenceName: subject_seq
             startValue: 1
   - changeSet:
-      id: 1715067437760-6
+      id: 1715553576368-5
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -54,7 +45,7 @@ databaseChangeLog:
             sequenceName: task_seq
             startValue: 1
   - changeSet:
-      id: 1715067437760-7
+      id: 1715553576368-6
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -63,7 +54,7 @@ databaseChangeLog:
             sequenceName: teacher_seq
             startValue: 1
   - changeSet:
-      id: 1715067437760-8
+      id: 1715553576368-7
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -72,7 +63,7 @@ databaseChangeLog:
             sequenceName: timer_note_seq
             startValue: 1
   - changeSet:
-      id: 1715067437760-9
+      id: 1715553576368-8
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -81,7 +72,16 @@ databaseChangeLog:
             sequenceName: timetable_seq
             startValue: 1
   - changeSet:
-      id: 1715067437760-10
+      id: 1715553576368-9
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: user_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1715553576368-10
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -99,7 +99,7 @@ databaseChangeLog:
                   type: VARCHAR(255)
             tableName: buildings
   - changeSet:
-      id: 1715067437760-11
+      id: 1715553576368-11
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -117,31 +117,7 @@ databaseChangeLog:
                   type: VARCHAR(255)
             tableName: class_types
   - changeSet:
-      id: 1715067437760-12
-      author: Biwaby (generated)
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - createTable:
-            columns:
-              - column:
-                  constraints:
-                    nullable: false
-                    primaryKey: true
-                    primaryKeyName: pk_classmates
-                  name: id
-                  type: BIGINT
-              - column:
-                  name: last_name
-                  type: VARCHAR(255)
-              - column:
-                  name: first_name
-                  type: VARCHAR(255)
-              - column:
-                  name: patronymic
-                  type: VARCHAR(255)
-            tableName: classmates
-  - changeSet:
-      id: 1715067437760-13
+      id: 1715553576368-12
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -162,7 +138,48 @@ databaseChangeLog:
                   type: VARCHAR(255)
             tableName: classrooms
   - changeSet:
-      id: 1715067437760-14
+      id: 1715553576368-13
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_lnk_user_roles
+                  name: role_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_lnk_user_roles
+                  name: user_id
+                  type: BIGINT
+            tableName: lnk_user_roles
+  - changeSet:
+      id: 1715553576368-14
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_roles
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: role
+                  type: VARCHAR(255)
+            tableName: roles
+  - changeSet:
+      id: 1715553576368-15
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -186,7 +203,7 @@ databaseChangeLog:
                   type: INT
             tableName: subjects
   - changeSet:
-      id: 1715067437760-15
+      id: 1715553576368-16
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -200,6 +217,9 @@ databaseChangeLog:
                   name: id
                   type: BIGINT
               - column:
+                  name: user_id
+                  type: BIGINT
+              - column:
                   name: title
                   type: TEXT
               - column:
@@ -209,14 +229,17 @@ databaseChangeLog:
                   name: subject_id
                   type: BIGINT
               - column:
-                  name: status
+                  name: completed
                   type: BOOLEAN
+              - column:
+                  name: completion_date
+                  type: DATETIME
               - column:
                   name: deadline_date
                   type: DATETIME
             tableName: tasks
   - changeSet:
-      id: 1715067437760-16
+      id: 1715553576368-17
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -243,7 +266,7 @@ databaseChangeLog:
                   type: VARCHAR(255)
             tableName: teachers
   - changeSet:
-      id: 1715067437760-17
+      id: 1715553576368-18
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -257,6 +280,9 @@ databaseChangeLog:
                   name: id
                   type: BIGINT
               - column:
+                  name: user_id
+                  type: BIGINT
+              - column:
                   name: subject_id
                   type: BIGINT
               - column:
@@ -267,7 +293,7 @@ databaseChangeLog:
                   type: VARCHAR(255)
             tableName: timer_notes
   - changeSet:
-      id: 1715067437760-18
+      id: 1715553576368-19
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -279,6 +305,9 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: pk_timetable
                   name: id
+                  type: BIGINT
+              - column:
+                  name: user_id
                   type: BIGINT
               - column:
                   name: subject_id
@@ -306,7 +335,31 @@ databaseChangeLog:
                   type: DATETIME
             tableName: timetable
   - changeSet:
-      id: 1715067437760-19
+      id: 1715553576368-20
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_users
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: username
+                  type: VARCHAR(255)
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  name: enabled
+                  type: BOOLEAN
+            tableName: users
+  - changeSet:
+      id: 1715553576368-21
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -315,7 +368,7 @@ databaseChangeLog:
             constraintName: uc_timernotes_subject
             tableName: timer_notes
   - changeSet:
-      id: 1715067437760-20
+      id: 1715553576368-22
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -326,7 +379,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: buildings
   - changeSet:
-      id: 1715067437760-21
+      id: 1715553576368-23
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -337,7 +390,18 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: subjects
   - changeSet:
-      id: 1715067437760-22
+      id: 1715553576368-24
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: tasks
+            constraintName: FK_TASKS_ON_USER
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1715553576368-25
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -348,7 +412,18 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: subjects
   - changeSet:
-      id: 1715067437760-23
+      id: 1715553576368-26
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: timer_notes
+            constraintName: FK_TIMERNOTES_ON_USER
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1715553576368-27
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -359,7 +434,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: classrooms
   - changeSet:
-      id: 1715067437760-24
+      id: 1715553576368-28
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -370,7 +445,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: class_types
   - changeSet:
-      id: 1715067437760-25
+      id: 1715553576368-29
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -381,7 +456,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: subjects
   - changeSet:
-      id: 1715067437760-26
+      id: 1715553576368-30
       author: Biwaby (generated)
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -391,4 +466,37 @@ databaseChangeLog:
             constraintName: FK_TIMETABLE_ON_TEACHER
             referencedColumnNames: id
             referencedTableName: teachers
+  - changeSet:
+      id: 1715553576368-31
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: timetable
+            constraintName: FK_TIMETABLE_ON_USER
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1715553576368-32
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: lnk_user_roles
+            constraintName: fk_lnkuserol_on_role
+            referencedColumnNames: id
+            referencedTableName: roles
+  - changeSet:
+      id: 1715553576368-33
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: lnk_user_roles
+            constraintName: fk_lnkuserol_on_user
+            referencedColumnNames: id
+            referencedTableName: users
 

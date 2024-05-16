@@ -1,15 +1,16 @@
-package org.biwaby.studytracker.models.DTO;
+package org.biwaby.studytracker.models.DTO.ViewDTO;
 
 import lombok.Data;
 import org.biwaby.studytracker.models.Subject;
 
 @Data
-public class TaskDTO {
+public class TaskPresentationDTO {
 
     private Long id;
+    private String user;
     private String title;
     private String description;
-    private Long subjectId;
+    private Subject subject;
     private boolean completed;
     private String completionDate;
     private String deadlineDate;

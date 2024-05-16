@@ -23,6 +23,10 @@ public class Task {
     @SequenceGenerator(sequenceName = "task_seq", name = "task_seq", allocationSize = 1)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Lob
     @Column(name = "title", columnDefinition = "TEXT")
     private String title;
@@ -35,8 +39,12 @@ public class Task {
     @JoinColumn(name = "subject_id")
     private Subject subject;
 
-    @Column(name = "status")
-    private boolean status;
+    @Column(name = "completed")
+    private boolean completed;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "Europe/Moscow")
+    @Column(name = "completion_date")
+    private Date completionDate;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "Europe/Moscow")
     @Column(name = "deadline_date")

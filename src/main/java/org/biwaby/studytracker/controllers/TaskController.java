@@ -2,8 +2,9 @@ package org.biwaby.studytracker.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.biwaby.studytracker.models.DTO.TaskDTO;
-import org.biwaby.studytracker.models.Task;
+import org.biwaby.studytracker.models.DTO.ViewDTO.TaskPresentationDTO;
 import org.biwaby.studytracker.services.interfaces.TaskService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,13 +19,13 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping
-    ResponseEntity<Task> addTask(@RequestBody TaskDTO dto) throws ParseException {
+    ResponseEntity<TaskPresentationDTO> addTask(@RequestBody TaskDTO dto) throws ParseException {
         return ResponseEntity.ok(taskService.addTask(dto));
     }
 
     @GetMapping
-    ResponseEntity<List<Task>> getAllTasks() {
-        return ResponseEntity.ok(taskService.getAllTasks());
+    ResponseEntity<Page<TaskPresentationDTO>> getAllTasks(@RequestParam int page) {
+        return ResponseEntity.ok(taskService.getAllTasks(page));
     }
 
     @DeleteMapping("/{id}")
@@ -35,6 +36,16 @@ public class TaskController {
         else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PutMapping("/markCompleted/{id}")
+    ResponseEntity<TaskPresentationDTO> markCompleted(@PathVariable Long id) {
+        return ResponseEntity.ok(taskService.markCompleted(id));
+    }
+
+    @PutMapping("/removeCompleted/{id}")
+    ResponseEntity<TaskPresentationDTO> removeCompleted(@PathVariable Long id) {
+        return ResponseEntity.ok(taskService.removeCompleted(id));
     }
 
     @PutMapping("/{id}")

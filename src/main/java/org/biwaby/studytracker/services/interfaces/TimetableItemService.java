@@ -1,6 +1,7 @@
 package org.biwaby.studytracker.services.interfaces;
 
 import org.biwaby.studytracker.models.DTO.TimetableItemDTO;
+import org.biwaby.studytracker.models.DTO.ViewDTO.TimetableDTO;
 import org.biwaby.studytracker.models.TimetableItem;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +11,9 @@ import java.util.List;
 @Service
 public interface TimetableItemService {
 
-    TimetableItem addItemInTimetable(TimetableItemDTO dto) throws ParseException;
+    TimetableDTO addItemInTimetable(TimetableItemDTO dto) throws ParseException;
 
-    List<TimetableItem> getAllItemsFromTimetable();
+    List<TimetableDTO> getAllItemsFromTimetable();
 
     boolean deleteItemFromTimetable(Long id);
 

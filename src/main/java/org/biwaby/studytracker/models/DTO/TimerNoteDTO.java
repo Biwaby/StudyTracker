@@ -9,6 +9,6 @@ public class TimerNoteDTO {
 
     private Long id;
     private Long subjectId;
-    private Date date;
+    private String date;
     private String duration;
 }
