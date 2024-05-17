@@ -28,14 +28,15 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getAllTasks(page));
     }
 
+    @GetMapping("/{id}")
+    ResponseEntity<TaskPresentationDTO> getTaskById(@PathVariable Long id) {
+        return ResponseEntity.ok(taskService.getTaskById(id));
+    }
+
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteTask(@PathVariable Long id) {
-        if (taskService.deleteTask(id)) {
-            return ResponseEntity.ok().build();
-        }
-        else {
-            return ResponseEntity.notFound().build();
-        }
+        taskService.deleteTask(id);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/markCompleted/{id}")
@@ -50,11 +51,7 @@ public class TaskController {
 
     @PutMapping("/{id}")
     ResponseEntity<Void> editTask(@PathVariable Long id, @RequestBody TaskDTO dto) throws ParseException {
-        if (taskService.editTask(id, dto)) {
-            return ResponseEntity.ok().build();
-        }
-        else {
-            return ResponseEntity.notFound().build();
-        }
+        taskService.editTask(id, dto);
+        return ResponseEntity.ok().build();
     }
 }

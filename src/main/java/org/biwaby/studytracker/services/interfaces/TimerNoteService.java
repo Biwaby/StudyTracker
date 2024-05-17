@@ -14,7 +14,9 @@ public interface TimerNoteService {
 
     List<TimerNotePresentationDTO> getAllTimerNotes();
 
-    boolean deleteTimerNote(Long id);
+    TimerNotePresentationDTO getTimerNoteById(Long id);
 
-    boolean editTimerNote(Long id, TimerNoteDTO dto) throws ParseException;
+    void deleteTimerNote(Long id);
+
+    void editTimerNote(Long id, TimerNoteDTO dto) throws ParseException;
 }

@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public interface UserService {
     Page<User> getAllUsers(int page);
-    UserDTO getUserByAuth();
+    User getUserByAuth();
     UserDTO registerUser(UserRegistrationDTO dto);
     UserDTO grantRole(Long userId, Long roleId);
     UserDTO revokeRole(Long userId, Long roleId);

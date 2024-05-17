@@ -1,6 +1,7 @@
 package org.biwaby.studytracker.services.implementations;
 
 import lombok.RequiredArgsConstructor;
+import org.biwaby.studytracker.exceptions.NotFoundExceptions.TeacherNotFoundException;
 import org.biwaby.studytracker.models.Teacher;
 import org.biwaby.studytracker.repositories.TeacherRepo;
 import org.biwaby.studytracker.services.interfaces.TeacherService;
@@ -23,6 +24,11 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public List<Teacher> getAllTeachers() {
         return teacherRepo.findAll();
+    }
+
+    @Override
+    public Teacher getTeacherById(Long id) {
+        return teacherRepo.findById(id).orElseThrow(TeacherNotFoundException::new);
     }
 
     @Override

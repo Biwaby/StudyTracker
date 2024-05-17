@@ -13,6 +13,8 @@ public interface ClassroomService {
 
     List<Classroom> getALlClassrooms();
 
+    Classroom getClassroomById(Long id);
+
     boolean deleteClassroom(Long id);
 
     boolean editClassroom(Long id, ClassroomDTO dto);

@@ -2,6 +2,8 @@ package org.biwaby.studytracker.services.implementations;
 
 import lombok.RequiredArgsConstructor;
 import org.biwaby.studytracker.exceptions.*;
+import org.biwaby.studytracker.exceptions.NotFoundExceptions.RoleNotFoundException;
+import org.biwaby.studytracker.exceptions.NotFoundExceptions.UserNotFoundException;
 import org.biwaby.studytracker.models.DTO.UserDTO;
 import org.biwaby.studytracker.models.DTO.UserRegistrationDTO;
 import org.biwaby.studytracker.models.Role;
@@ -36,14 +38,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDTO getUserByAuth() {
-        User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return new UserDTO(
-                sessionUser.getId(),
-                sessionUser.getUsername(),
-                sessionUser.isEnabled(),
-                sessionUser.getRoles()
-        );
+    public User getUserByAuth() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     @Override

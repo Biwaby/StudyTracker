@@ -7,10 +7,11 @@ import java.util.List;
 
 @Service
 public interface BuildingService {
-
     Building addBuilding(Building building);
 
     List<Building> getAllBuildings();
+
+    Building getBuildingById(Long id);
 
     boolean deleteBuilding(Long id);
 

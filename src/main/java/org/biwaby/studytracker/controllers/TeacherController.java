@@ -25,6 +25,11 @@ public class TeacherController {
         return ResponseEntity.ok(teacherService.getAllTeachers());
     }
 
+    @GetMapping("/{id}")
+    ResponseEntity<Teacher> getTeacherById(@PathVariable Long id) {
+        return ResponseEntity.ok(teacherService.getTeacherById(id));
+    }
+
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteTeacher(@PathVariable Long id) {
         if (teacherService.deleteTeacher(id)) {

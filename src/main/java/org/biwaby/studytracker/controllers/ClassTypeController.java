@@ -25,6 +25,11 @@ public class ClassTypeController {
         return ResponseEntity.ok(classTypeService.getAllClassTypes());
     }
 
+    @GetMapping("/{id}")
+    ResponseEntity<ClassType> getClassTypeById(@PathVariable Long id) {
+        return ResponseEntity.ok(classTypeService.getClassTypeById(id));
+    }
+
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteClassType(@PathVariable Long id) {
         if (classTypeService.deleteClassType(id)) {

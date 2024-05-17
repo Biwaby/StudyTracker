@@ -25,6 +25,9 @@ public class BuildingController {
         return ResponseEntity.ok(buildingService.getAllBuildings());
     }
 
+    @GetMapping("/{id}")
+    ResponseEntity<Building> getBuildingById(@PathVariable Long id) { return ResponseEntity.ok(buildingService.getBuildingById(id)); }
+
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteBuilding(@PathVariable Long id) {
         if (buildingService.deleteBuilding(id)) {

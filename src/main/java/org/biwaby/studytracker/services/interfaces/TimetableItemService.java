@@ -15,7 +15,9 @@ public interface TimetableItemService {
 
     List<TimetableDTO> getAllItemsFromTimetable();
 
-    boolean deleteItemFromTimetable(Long id);
+    TimetableDTO getTimetableItemById(Long id);
 
-    boolean editItemInTimetable(Long id, TimetableItemDTO dto) throws ParseException;
+    void deleteItemFromTimetable(Long id);
+
+    void editItemInTimetable(Long id, TimetableItemDTO dto) throws ParseException;
 }

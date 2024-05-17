@@ -27,23 +27,20 @@ public class TimerNoteController {
         return ResponseEntity.ok(timerNoteService.getAllTimerNotes());
     }
 
+    @GetMapping("/{id}")
+    ResponseEntity<TimerNotePresentationDTO> getTimerNoteById(@PathVariable Long id) {
+        return ResponseEntity.ok(timerNoteService.getTimerNoteById(id));
+    }
+
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteTimerNote(@PathVariable Long id) {
-        if (timerNoteService.deleteTimerNote(id)) {
-            return ResponseEntity.ok().build();
-        }
-        else {
-            return ResponseEntity.notFound().build();
-        }
+        timerNoteService.deleteTimerNote(id);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
     ResponseEntity<Void> editTimerNote(@PathVariable Long id, @RequestBody TimerNoteDTO dto) throws ParseException {
-        if (timerNoteService.editTimerNote(id, dto)) {
-            return ResponseEntity.ok().build();
-        }
-        else {
-            return ResponseEntity.notFound().build();
-        }
+        timerNoteService.editTimerNote(id, dto);
+        return ResponseEntity.ok().build();
     }
 }

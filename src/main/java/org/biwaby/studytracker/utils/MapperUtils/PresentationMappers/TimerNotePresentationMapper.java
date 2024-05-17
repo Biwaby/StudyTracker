@@ -17,7 +17,6 @@ public class TimerNotePresentationMapper {
     public TimerNotePresentationDTO toDTO(TimerNote timerNote) {
         TimerNotePresentationDTO dto = new TimerNotePresentationDTO();
         dto.setId(timerNote.getId());
-        //dto.setUser(userService.getUserByAuth().getUsername());
         dto.setUser(timerNote.getUser().getUsername());
         dto.setSubject(timerNote.getSubject());
         dto.setDate(new SimpleDateFormat("dd-MM-yyyy").format(timerNote.getDate()));

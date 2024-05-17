@@ -12,6 +12,8 @@ public interface SubjectService {
 
     List<Subject> getAllSubjects();
 
+    Subject getSubjectById(Long id);
+
     boolean deleteSubject(Long id);
 
     boolean editSubject(Long id, Subject subject);

@@ -1,6 +1,7 @@
 package org.biwaby.studytracker.services.implementations;
 
 import lombok.RequiredArgsConstructor;
+import org.biwaby.studytracker.exceptions.NotFoundExceptions.ClassTypeNotFoundException;
 import org.biwaby.studytracker.models.ClassType;
 import org.biwaby.studytracker.repositories.ClassTypeRepo;
 import org.biwaby.studytracker.services.interfaces.ClassTypeService;
@@ -23,6 +24,11 @@ public class ClassTypeServiceImpl implements ClassTypeService {
     @Override
     public List<ClassType> getAllClassTypes() {
         return classTypeRepo.findAll();
+    }
+
+    @Override
+    public ClassType getClassTypeById(Long id) {
+        return classTypeRepo.findById(id).orElseThrow(ClassTypeNotFoundException::new);
     }
 
     @Override

@@ -16,11 +16,13 @@ public interface TaskService {
 
     Page<TaskPresentationDTO> getAllTasks(int page);
 
-    boolean deleteTask(Long id);
+    TaskPresentationDTO getTaskById(Long id);
+
+    void deleteTask(Long id);
 
     TaskPresentationDTO markCompleted(Long id);
 
     TaskPresentationDTO removeCompleted(Long id);
 
-    boolean editTask(Long id, TaskDTO dto) throws ParseException;
+    void editTask(Long id, TaskDTO dto) throws ParseException;
 }

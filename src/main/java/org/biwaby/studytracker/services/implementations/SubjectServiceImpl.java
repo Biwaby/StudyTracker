@@ -1,6 +1,7 @@
 package org.biwaby.studytracker.services.implementations;
 
 import lombok.RequiredArgsConstructor;
+import org.biwaby.studytracker.exceptions.NotFoundExceptions.SubjectNotFoundException;
 import org.biwaby.studytracker.models.Subject;
 import org.biwaby.studytracker.repositories.SubjectRepo;
 import org.biwaby.studytracker.services.interfaces.SubjectService;
@@ -23,6 +24,11 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public List<Subject> getAllSubjects() {
         return subjectRepo.findAll();
+    }
+
+    @Override
+    public Subject getSubjectById(Long id) {
+        return subjectRepo.findById(id).orElseThrow(SubjectNotFoundException::new);
     }
 
     @Override

@@ -25,6 +25,11 @@ public class SubjectController {
         return ResponseEntity.ok(subjectService.getAllSubjects());
     }
 
+    @GetMapping("/{id}")
+    ResponseEntity<Subject> getSubjectById(@PathVariable Long id) {
+        return ResponseEntity.ok(subjectService.getSubjectById(id));
+    }
+
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteSubject(@PathVariable Long id) {
         if (subjectService.deleteSubject(id)) {

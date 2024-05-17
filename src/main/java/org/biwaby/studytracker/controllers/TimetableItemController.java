@@ -28,23 +28,20 @@ public class TimetableItemController {
         return ResponseEntity.ok(timetableItemService.getAllItemsFromTimetable());
     }
 
+    @GetMapping("/{id}")
+    ResponseEntity<TimetableDTO> getTimetableItemById(@PathVariable Long id) {
+        return ResponseEntity.ok(timetableItemService.getTimetableItemById(id));
+    }
+
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteTimetableItem(@PathVariable Long id) {
-        if (timetableItemService.deleteItemFromTimetable(id)) {
-            return ResponseEntity.ok().build();
-        }
-        else {
-            return ResponseEntity.notFound().build();
-        }
+        timetableItemService.deleteItemFromTimetable(id);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
     ResponseEntity<Void> editTimetableItem(@PathVariable Long id, @RequestBody TimetableItemDTO dto) throws ParseException {
-        if (timetableItemService.editItemInTimetable(id, dto)) {
-            return ResponseEntity.ok().build();
-        }
-        else {
-            return ResponseEntity.notFound().build();
-        }
+        timetableItemService.editItemInTimetable(id, dto);
+        return ResponseEntity.ok().build();
     }
 }

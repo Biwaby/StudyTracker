@@ -6,6 +6,7 @@ import org.biwaby.studytracker.models.Subject;
 import org.biwaby.studytracker.models.TimerNote;
 import org.biwaby.studytracker.models.User;
 import org.biwaby.studytracker.repositories.SubjectRepo;
+import org.biwaby.studytracker.services.interfaces.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.Optional;
 public class TimerNoteMapper {
 
     private final SubjectRepo subjectRepo;
+    private final UserService userService;
 
     public TimerNoteDTO toDTO(TimerNote timerNote) {
         TimerNoteDTO dto = new TimerNoteDTO();
@@ -30,7 +32,7 @@ public class TimerNoteMapper {
     public TimerNote toEntity(TimerNoteDTO dto) throws ParseException {
         TimerNote timerNote = new TimerNote();
 
-        timerNote.setUser((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        timerNote.setUser(userService.getUserByAuth());
         Optional<Subject> optionalSubject = subjectRepo.findById(dto.getSubjectId());
         if (optionalSubject.isPresent()) {
             timerNote.setSubject(optionalSubject.get());

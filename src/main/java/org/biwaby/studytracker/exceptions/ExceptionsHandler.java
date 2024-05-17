@@ -1,6 +1,7 @@
 package org.biwaby.studytracker.exceptions;
 
 import lombok.extern.slf4j.Slf4j;
+import org.biwaby.studytracker.exceptions.NotFoundExceptions.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -97,6 +98,76 @@ public class ExceptionsHandler {
                 new ErrorResponse(
                         400L,
                         "Пользователь не владеет данной ролью"
+                )
+        );
+    }
+
+    @ExceptionHandler(TimetableItemNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleException(TimetableItemNotFoundException e) {
+        return ResponseEntity.status(400).body(
+                new ErrorResponse(
+                        400L,
+                        "Элемент расписания не найден"
+                )
+        );
+    }
+
+    @ExceptionHandler(TimerNoteNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleException(TimerNoteNotFoundException e) {
+        return ResponseEntity.status(400).body(
+                new ErrorResponse(
+                        400L,
+                        "Запись таймера не найдена"
+                )
+        );
+    }
+
+    @ExceptionHandler(BuildingNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleException(BuildingNotFoundException e) {
+        return ResponseEntity.status(400).body(
+                new ErrorResponse(
+                        400L,
+                        "Учебный корпус не найден"
+                )
+        );
+    }
+
+    @ExceptionHandler(ClassroomNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleException(ClassroomNotFoundException e) {
+        return ResponseEntity.status(400).body(
+                new ErrorResponse(
+                        400L,
+                        "Учебная аудитория не найдена"
+                )
+        );
+    }
+
+    @ExceptionHandler(ClassTypeNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleException(ClassTypeNotFoundException e) {
+        return ResponseEntity.status(400).body(
+                new ErrorResponse(
+                        400L,
+                        "Тип занятия не найден"
+                )
+        );
+    }
+
+    @ExceptionHandler(SubjectNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleException(SubjectNotFoundException e) {
+        return ResponseEntity.status(400).body(
+                new ErrorResponse(
+                        400L,
+                        "Учебная дисциплина не найдена"
+                )
+        );
+    }
+
+    @ExceptionHandler(TeacherNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleException(TeacherNotFoundException e) {
+        return ResponseEntity.status(400).body(
+                new ErrorResponse(
+                        400L,
+                        "Преподаватель не найден"
                 )
         );
     }

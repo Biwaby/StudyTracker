@@ -26,6 +26,11 @@ public class ClassroomController {
         return ResponseEntity.ok(classroomService.getALlClassrooms());
     }
 
+    @GetMapping("/{id}")
+    ResponseEntity<Classroom> getClassroomById(@PathVariable Long id) {
+        return ResponseEntity.ok(classroomService.getClassroomById(id));
+    }
+
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteClassroom(@PathVariable Long id) {
         if (classroomService.deleteClassroom(id)) {

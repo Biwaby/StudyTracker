@@ -12,6 +12,8 @@ public interface TeacherService {
 
     List<Teacher> getAllTeachers();
 
+    Teacher getTeacherById(Long id);
+
     boolean deleteTeacher(Long id);
 
     boolean editTeacher(Long id, Teacher teacher);

@@ -12,6 +12,8 @@ public interface ClassTypeService {
 
     List<ClassType> getAllClassTypes();
 
+    ClassType getClassTypeById(Long id);
+
     boolean deleteClassType(Long id);
 
     boolean editClassType(Long id, ClassType classType);

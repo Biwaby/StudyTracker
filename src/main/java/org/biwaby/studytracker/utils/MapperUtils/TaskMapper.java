@@ -19,6 +19,7 @@ import java.util.Optional;
 public class TaskMapper {
 
     private final SubjectRepo subjectRepo;
+    private final UserService userService;
 
     public TaskDTO toDTO(Task task) {
         TaskDTO dto = new TaskDTO();
@@ -37,7 +38,7 @@ public class TaskMapper {
     public Task toEntity(TaskDTO dto) throws ParseException {
         Task task = new Task();
 
-        task.setUser((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        task.setUser(userService.getUserByAuth());
         task.setTitle(dto.getTitle());
         task.setDescription(dto.getDescription());
         Optional<Subject> optionalSubject = subjectRepo.findById(dto.getSubjectId());

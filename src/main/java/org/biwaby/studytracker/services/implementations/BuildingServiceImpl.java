@@ -1,6 +1,7 @@
 package org.biwaby.studytracker.services.implementations;
 
 import lombok.RequiredArgsConstructor;
+import org.biwaby.studytracker.exceptions.NotFoundExceptions.BuildingNotFoundException;
 import org.biwaby.studytracker.models.Building;
 import org.biwaby.studytracker.repositories.BuildingRepo;
 import org.biwaby.studytracker.services.interfaces.BuildingService;
@@ -23,6 +24,11 @@ public class BuildingServiceImpl implements BuildingService {
     @Override
     public List<Building> getAllBuildings() {
         return buildingRepo.findAll();
+    }
+
+    @Override
+    public Building getBuildingById(Long id) {
+        return buildingRepo.findById(id).orElseThrow(BuildingNotFoundException::new);
     }
 
     @Override

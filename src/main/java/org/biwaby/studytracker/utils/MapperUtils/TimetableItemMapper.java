@@ -7,6 +7,7 @@ import org.biwaby.studytracker.repositories.ClassTypeRepo;
 import org.biwaby.studytracker.repositories.ClassroomRepo;
 import org.biwaby.studytracker.repositories.SubjectRepo;
 import org.biwaby.studytracker.repositories.TeacherRepo;
+import org.biwaby.studytracker.services.interfaces.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ public class TimetableItemMapper {
     private final TeacherRepo teacherRepo;
     private final ClassTypeRepo classTypeRepo;
     private final ClassroomRepo classroomRepo;
+    private final UserService userService;
 
     public TimetableItemDTO toDTO(TimetableItem timetable) {
         TimetableItemDTO dto = new TimetableItemDTO();
@@ -42,7 +44,7 @@ public class TimetableItemMapper {
     public TimetableItem toEntity(TimetableItemDTO dto) throws ParseException {
         TimetableItem timetableItem = new TimetableItem();
 
-        timetableItem.setUser((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        timetableItem.setUser(userService.getUserByAuth());
         Optional<Subject> optionalSubject = subjectRepo.findById(dto.getSubjectId());
         Optional<Teacher> optionalTeacher = teacherRepo.findById(dto.getTeacherId());
         Optional<ClassType> optionalClassType = classTypeRepo.findById(dto.getClassTypeId());

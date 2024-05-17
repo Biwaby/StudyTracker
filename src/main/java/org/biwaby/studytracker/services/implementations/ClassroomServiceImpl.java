@@ -1,6 +1,7 @@
 package org.biwaby.studytracker.services.implementations;
 
 import lombok.RequiredArgsConstructor;
+import org.biwaby.studytracker.exceptions.NotFoundExceptions.ClassroomNotFoundException;
 import org.biwaby.studytracker.models.Classroom;
 import org.biwaby.studytracker.models.DTO.ClassroomDTO;
 import org.biwaby.studytracker.repositories.ClassroomRepo;
@@ -26,6 +27,11 @@ public class ClassroomServiceImpl implements ClassroomService {
     @Override
     public List<Classroom> getALlClassrooms() {
         return classroomRepo.findAll();
+    }
+
+    @Override
+    public Classroom getClassroomById(Long id) {
+        return classroomRepo.findById(id).orElseThrow(ClassroomNotFoundException::new);
     }
 
     @Override
