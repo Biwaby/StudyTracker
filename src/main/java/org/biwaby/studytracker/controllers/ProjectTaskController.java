@@ -38,8 +38,7 @@ public class ProjectTaskController {
     }
 
     @PutMapping("/edit")
-    ResponseEntity<Void> editTask(@RequestParam Long projectId, @RequestParam Long taskId, @RequestBody ProjectTaskDTO dto) {
-        projectTaskService.editTask(projectId, taskId, dto);
-        return ResponseEntity.ok().build();
+    ResponseEntity<ProjectTaskDTO> editTask(@RequestParam Long projectId, @RequestParam Long taskId, @RequestBody ProjectTaskDTO dto) {
+        return ResponseEntity.ok(projectTaskService.editTask(projectId, taskId, dto));
     }
 }

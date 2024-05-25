@@ -43,7 +43,7 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
 
         ProjectTask task = mapper.toEntity(dto);
         task.setProject(project);
-        projectTaskRepo.save(task);
+        task = projectTaskRepo.save(task);
         return mapper.toDTO(task);
     }
 
@@ -103,7 +103,7 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
     }
 
     @Override
-    public void editTask(Long projectId, Long taskId, ProjectTaskDTO dto) {
+    public ProjectTaskDTO editTask(Long projectId, Long taskId, ProjectTaskDTO dto) {
         User user = userService.getUserByAuth();
         Role admin = roleRepo.findByAuthority("ADMIN").get();
         Project project = projectRepo.findById(projectId).orElseThrow(ProjectNotFoundException::new);
@@ -119,6 +119,7 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
         }
 
         mapper.updateDataFromDTO(task, dto);
-        projectTaskRepo.save(task);
+        task = projectTaskRepo.save(task);
+        return mapper.toDTO(task);
     }
 }

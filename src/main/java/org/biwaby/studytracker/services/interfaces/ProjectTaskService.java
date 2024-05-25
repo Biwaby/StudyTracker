@@ -11,5 +11,5 @@ public interface ProjectTaskService {
     List<ProjectTaskDTO> getAllTasksFromProject(Long projectId);
     ProjectTaskDTO getTaskByIdFromProject(Long projectId, Long taskId);
     void deleteTaskFromProject(Long projectId, Long taskId);
-    void editTask(Long projectId, Long taskId, ProjectTaskDTO dto);
+    ProjectTaskDTO editTask(Long projectId, Long taskId, ProjectTaskDTO dto);
 }

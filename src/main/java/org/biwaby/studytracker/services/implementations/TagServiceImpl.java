@@ -80,7 +80,6 @@ public class TagServiceImpl implements TagService {
 
         mapper.updateDataFromDTO(tag, dto);
         tag = tagRepo.save(tag);
-
         return mapper.toDTO(tag);
     }
 }
