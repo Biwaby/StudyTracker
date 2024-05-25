@@ -12,5 +12,5 @@ public interface ProjectService {
     List<ProjectDTO> getAllProjects();
     ProjectDTO getProjectById(Long id);
     void deleteProject(Long id);
-    void editProject(Long id, ProjectDTO dto);
+    ProjectDTO editProject(Long id, ProjectDTO dto);
 }

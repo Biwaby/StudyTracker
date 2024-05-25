@@ -106,7 +106,6 @@ public class TagServiceTest {
         otherUser.setPassword("1234");
         otherUser.setEnabled(true);
 
-        TagDTO expectedDTO = new TagDTO(1L, "test tag 1");
         Tag foundTag = new Tag(1L, otherUser, "test tag 1");
 
         Mockito.when(roleRepo.findByAuthority("ADMIN")).thenReturn(Optional.of(new Role(2L, "ADMIN")));

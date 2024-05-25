@@ -37,8 +37,7 @@ public class ProjectController {
     }
 
     @PutMapping("/edit")
-    ResponseEntity<Void> editProject(@RequestParam Long projectId, @RequestBody ProjectDTO dto) {
-        projectService.editProject(projectId, dto);
-        return ResponseEntity.ok().build();
+    ResponseEntity<ProjectDTO> editProject(@RequestParam Long projectId, @RequestBody ProjectDTO dto) {
+        return ResponseEntity.ok(projectService.editProject(projectId, dto));
     }
 }

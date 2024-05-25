@@ -31,7 +31,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDTO createNewProject(ProjectDTO dto) {
         Project project = mapper.toEntity(dto);
         project.setUser(userService.getUserByAuth());
-        projectRepo.save(project);
+        project = projectRepo.save(project);
         return mapper.toDTO(project);
     }
 
@@ -71,7 +71,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void editProject(Long id, ProjectDTO dto) {
+    public ProjectDTO editProject(Long id, ProjectDTO dto) {
         User user = userService.getUserByAuth();
         Role admin = roleRepo.findByAuthority("ADMIN").get();
         Project project = projectRepo.findById(id).orElseThrow(ProjectNotFoundException::new);
@@ -81,6 +81,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         mapper.updateDataFromDTO(project, dto);
-        projectRepo.save(project);
+        project = projectRepo.save(project);
+        return mapper.toDTO(project);
     }
 }
