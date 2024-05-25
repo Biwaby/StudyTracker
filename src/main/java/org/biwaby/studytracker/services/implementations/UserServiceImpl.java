@@ -1,15 +1,17 @@
 package org.biwaby.studytracker.services.implementations;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.biwaby.studytracker.exceptions.*;
 import org.biwaby.studytracker.exceptions.NotFoundExceptions.RoleNotFoundException;
 import org.biwaby.studytracker.exceptions.NotFoundExceptions.UserNotFoundException;
 import org.biwaby.studytracker.models.DTO.UserDTO;
 import org.biwaby.studytracker.models.DTO.UserRegistrationDTO;
+import org.biwaby.studytracker.models.Project;
 import org.biwaby.studytracker.models.Role;
+import org.biwaby.studytracker.models.Tag;
 import org.biwaby.studytracker.models.User;
-import org.biwaby.studytracker.repositories.RoleRepo;
-import org.biwaby.studytracker.repositories.UserRepo;
+import org.biwaby.studytracker.repositories.*;
 import org.biwaby.studytracker.services.interfaces.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,6 +33,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepo userRepo;
     private final RoleRepo roleRepo;
     private final PasswordEncoder passwordEncoder;
+
+    private final TagRepo tagRepo;
+    private final ProjectRepo projectRepo;
+    private final ProjectTaskRepo projectTaskRepo;
+    private final TimerRecordRepo timerRecordRepo;
 
     @Override
     public Page<User> getAllUsers(int page) {
@@ -129,8 +136,36 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void deleteUser(Long userId) {
+    @Transactional
+    public void deleteUser() {
+        User user = getUserByAuth();
+
+        tagRepo.deleteAllByUser(user);
+        List<Project> projects = projectRepo.findAllByUser(user);
+        for (Project project : projects) {
+            if (!project.getTasks().isEmpty()) {
+                projectTaskRepo.deleteAllByProject(project);
+            }
+        }
+        projectRepo.deleteAllByUser(user);
+        timerRecordRepo.deleteAllByUser(user);
+        userRepo.delete(user);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUserById(Long userId) {
         User user = userRepo.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        tagRepo.deleteAllByUser(user);
+        List<Project> projects = projectRepo.findAllByUser(user);
+        for (Project project : projects) {
+            if (!project.getTasks().isEmpty()) {
+                projectTaskRepo.deleteAllByProject(project);
+            }
+        }
+        projectRepo.deleteAllByUser(user);
+        timerRecordRepo.deleteAllByUser(user);
         userRepo.delete(user);
     }
 

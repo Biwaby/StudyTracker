@@ -13,6 +13,7 @@ import java.util.Set;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @Entity(name = "users")
 @Table(name = "users")
 public class User implements UserDetails {

@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/roles")
+@RequestMapping("/admin/users/roles")
 public class RoleController {
 
     private final RoleService roleService;
@@ -20,14 +20,14 @@ public class RoleController {
         return ResponseEntity.ok(roleService.getAllRoles());
     }
 
-    @PostMapping
+    @PostMapping("/add")
     ResponseEntity<Role> addRole(@RequestBody Role role) {
         return ResponseEntity.ok(roleService.addRole(role));
     }
 
-    @DeleteMapping("/{id}")
-    ResponseEntity<Void> deleteRole(@PathVariable Long id) {
-        roleService.deleteRole(id);
+    @DeleteMapping("/delete")
+    ResponseEntity<Void> deleteRole(@RequestParam Long roleId) {
+        roleService.deleteRole(roleId);
         return ResponseEntity.ok().build();
     }
 }

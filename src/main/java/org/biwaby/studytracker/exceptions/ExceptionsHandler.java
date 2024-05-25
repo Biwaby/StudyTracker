@@ -12,42 +12,32 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Component
 public class ExceptionsHandler {
 
-    @ExceptionHandler(TimerNoteAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponse> handleException(TimerNoteAlreadyExistsException e) {
+    @ExceptionHandler(ProjectTaskNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleException(ProjectTaskNotFoundException e) {
         return ResponseEntity.status(400).body(
                 new ErrorResponse(
                         400L,
-                        "С данным предметом запись таймера уже существует"
+                        "Task not found"
                 )
         );
     }
 
-    @ExceptionHandler(TaskNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleException(TaskNotFoundException e) {
+    @ExceptionHandler(ProjectTaskAlreadyCompletedException.class)
+    public ResponseEntity<ErrorResponse> handleException(ProjectTaskAlreadyCompletedException e) {
         return ResponseEntity.status(400).body(
                 new ErrorResponse(
                         400L,
-                        "Задание не найдено"
+                        "This task has already been completed"
                 )
         );
     }
 
-    @ExceptionHandler(TaskAlreadyCompletedException.class)
-    public ResponseEntity<ErrorResponse> handleException(TaskAlreadyCompletedException e) {
+    @ExceptionHandler(ProjectTaskHasNotBeenCompletedAnywayException.class)
+    public ResponseEntity<ErrorResponse> handleException(ProjectTaskHasNotBeenCompletedAnywayException e) {
         return ResponseEntity.status(400).body(
                 new ErrorResponse(
                         400L,
-                        "Задание уже выполнено"
-                )
-        );
-    }
-
-    @ExceptionHandler(TaskHasNotBeenCompletedAnywayException.class)
-    public ResponseEntity<ErrorResponse> handleException(TaskHasNotBeenCompletedAnywayException e) {
-        return ResponseEntity.status(400).body(
-                new ErrorResponse(
-                        400L,
-                        "Задание и так не выполнено"
+                        "This task hasn't been completed anyway"
                 )
         );
     }
@@ -57,7 +47,7 @@ public class ExceptionsHandler {
         return ResponseEntity.status(400).body(
                 new ErrorResponse(
                         400L,
-                        "Пользователь с данным именем уже существует"
+                        "A user with this username already exist"
                 )
         );
     }
@@ -67,7 +57,7 @@ public class ExceptionsHandler {
         return ResponseEntity.status(400).body(
                 new ErrorResponse(
                         400L,
-                        "Введены некорректные данные пользователя"
+                        "Incorrect user data has been entered"
                 )
         );
     }
@@ -77,7 +67,7 @@ public class ExceptionsHandler {
         return ResponseEntity.status(400).body(
                 new ErrorResponse(
                         400L,
-                        "Пользователь не найден"
+                        "User not found"
                 )
         );
     }
@@ -87,7 +77,7 @@ public class ExceptionsHandler {
         return ResponseEntity.status(400).body(
                 new ErrorResponse(
                         400L,
-                        "Роль не найдена"
+                        "Role not found"
                 )
         );
     }
@@ -97,77 +87,47 @@ public class ExceptionsHandler {
         return ResponseEntity.status(400).body(
                 new ErrorResponse(
                         400L,
-                        "Пользователь не владеет данной ролью"
+                        "User doesn't have a role"
                 )
         );
     }
 
-    @ExceptionHandler(TimetableItemNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleException(TimetableItemNotFoundException e) {
+    @ExceptionHandler(ProjectNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResponse(ProjectNotFoundException e) {
         return ResponseEntity.status(400).body(
                 new ErrorResponse(
                         400L,
-                        "Элемент расписания не найден"
+                        "Project not found"
                 )
         );
     }
 
-    @ExceptionHandler(TimerNoteNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleException(TimerNoteNotFoundException e) {
+    @ExceptionHandler(TagNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResponse(TagNotFoundException e) {
         return ResponseEntity.status(400).body(
                 new ErrorResponse(
                         400L,
-                        "Запись таймера не найдена"
+                        "Tag not found"
                 )
         );
     }
 
-    @ExceptionHandler(BuildingNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleException(BuildingNotFoundException e) {
+    @ExceptionHandler(TimerRecordNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResponse(TimerRecordNotFoundException e) {
         return ResponseEntity.status(400).body(
                 new ErrorResponse(
                         400L,
-                        "Учебный корпус не найден"
+                        "Timer record not found"
                 )
         );
     }
 
-    @ExceptionHandler(ClassroomNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleException(ClassroomNotFoundException e) {
+    @ExceptionHandler(RecordAlreadyHasTagException.class)
+    public ResponseEntity<ErrorResponse> handleResponse(RecordAlreadyHasTagException e) {
         return ResponseEntity.status(400).body(
                 new ErrorResponse(
                         400L,
-                        "Учебная аудитория не найдена"
-                )
-        );
-    }
-
-    @ExceptionHandler(ClassTypeNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleException(ClassTypeNotFoundException e) {
-        return ResponseEntity.status(400).body(
-                new ErrorResponse(
-                        400L,
-                        "Тип занятия не найден"
-                )
-        );
-    }
-
-    @ExceptionHandler(SubjectNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleException(SubjectNotFoundException e) {
-        return ResponseEntity.status(400).body(
-                new ErrorResponse(
-                        400L,
-                        "Учебная дисциплина не найдена"
-                )
-        );
-    }
-
-    @ExceptionHandler(TeacherNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleException(TeacherNotFoundException e) {
-        return ResponseEntity.status(400).body(
-                new ErrorResponse(
-                        400L,
-                        "Преподаватель не найден"
+                        "Timer record already has this tag"
                 )
         );
     }

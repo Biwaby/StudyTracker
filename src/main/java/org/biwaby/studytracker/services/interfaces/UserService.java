@@ -16,5 +16,6 @@ public interface UserService {
     UserDTO registerUser(UserRegistrationDTO dto);
     UserDTO grantRole(Long userId, Long roleId);
     UserDTO revokeRole(Long userId, Long roleId);
-    void deleteUser(Long userId);
+    void deleteUser();
+    void deleteUserById(Long userId);
 }
