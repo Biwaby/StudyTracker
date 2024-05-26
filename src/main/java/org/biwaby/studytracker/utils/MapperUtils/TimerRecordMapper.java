@@ -36,6 +36,7 @@ public class TimerRecordMapper {
         record.setStartTime(new SimpleDateFormat("HH:mm:ss").parse(dto.getStartTime()));
         record.setEndTime(new SimpleDateFormat("HH:mm:ss").parse(dto.getEndTime()));
         record.setRecordDate(new SimpleDateFormat("dd-MM-yyyy").parse(dto.getRecordDate()));
+        record.setProject(null);
 
         return record;
     }

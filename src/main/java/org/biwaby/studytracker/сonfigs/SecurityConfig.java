@@ -39,6 +39,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.PUT, "/timer/edit").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/timer/addTag").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/timer/removeTag").authenticated()
+                                .requestMatchers(HttpMethod.PUT, "/timer/addProject").authenticated()
+                                .requestMatchers(HttpMethod.PUT, "/timer/removeProject").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/projects/edit").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/projects/tasks/edit").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/tags/edit").authenticated()

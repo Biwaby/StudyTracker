@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -52,5 +53,5 @@ public class TimerRecord {
     @JoinTable(name = "timer_records_tags",
             joinColumns = @JoinColumn(name = "timer_record_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags;
+    private Set<Tag> tags = new HashSet<>();
 }

@@ -167,6 +167,7 @@ public class TagServiceTest {
     @Test
     @UseMockWithCustomUser
     void editForNonExistingTag() {
+        Mockito.when(roleRepo.findByAuthority("ADMIN")).thenReturn(Optional.of(new Role(2L, "ADMIN")));
         Mockito.when(tagRepo.findById(1L)).thenReturn(Optional.empty());
         assertThrows(TagNotFoundException.class, () -> tagService.editTag(1L, null));
     }

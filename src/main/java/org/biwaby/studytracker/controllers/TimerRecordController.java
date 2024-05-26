@@ -38,9 +38,8 @@ public class TimerRecordController {
     }
 
     @PutMapping("/edit")
-    ResponseEntity<Void> editRecord(@RequestParam Long recordId, @RequestBody TimerRecordDTO dto) throws ParseException {
-        timerRecordService.editRecord(recordId, dto);
-        return ResponseEntity.ok().build();
+    ResponseEntity<TimerRecordDTO> editRecord(@RequestParam Long recordId, @RequestBody TimerRecordDTO dto) throws ParseException {
+        return ResponseEntity.ok(timerRecordService.editRecord(recordId, dto));
     }
 
     @PutMapping("/addTag")
@@ -51,5 +50,15 @@ public class TimerRecordController {
     @PutMapping("/removeTag")
     ResponseEntity<TimerRecordDTO> removeTagFromRecord(@RequestParam Long recordId, @RequestParam Long tagId) {
         return ResponseEntity.ok(timerRecordService.removeTagFromRecord(recordId, tagId));
+    }
+
+    @PutMapping("/addProject")
+    ResponseEntity<TimerRecordDTO> addProjectToRecord(@RequestParam Long recordId, @RequestParam Long projectId) {
+        return ResponseEntity.ok(timerRecordService.addProjectToRecord(recordId, projectId));
+    }
+
+    @PutMapping("/removeProject")
+    ResponseEntity<TimerRecordDTO> removeProjectFromRecord(@RequestParam Long recordId, @RequestParam Long projectId) {
+        return ResponseEntity.ok(timerRecordService.removeProjectFromRecord(recordId, projectId));
     }
 }

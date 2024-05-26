@@ -127,7 +127,37 @@ public class ExceptionsHandler {
         return ResponseEntity.status(400).body(
                 new ErrorResponse(
                         400L,
-                        "Timer record already has this tag"
+                        "Timer record already has tag"
+                )
+        );
+    }
+
+    @ExceptionHandler(RecordAlreadyHasProjectException.class)
+    public ResponseEntity<ErrorResponse> handleResponse(RecordAlreadyHasProjectException e) {
+        return ResponseEntity.status(400).body(
+                new ErrorResponse(
+                        400L,
+                        "Timer record already has project"
+                )
+        );
+    }
+
+    @ExceptionHandler(RecordDoesNotHaveTagException.class)
+    public ResponseEntity<ErrorResponse> handleResponse(RecordDoesNotHaveTagException e) {
+        return ResponseEntity.status(400).body(
+                new ErrorResponse(
+                        400L,
+                        "Record doesn't have this tag"
+                )
+        );
+    }
+
+    @ExceptionHandler(RecordDoesNotHaveProjectException.class)
+    public ResponseEntity<ErrorResponse> handleResponse(RecordDoesNotHaveProjectException e) {
+        return ResponseEntity.status(400).body(
+                new ErrorResponse(
+                        400L,
+                        "Record doesn't have this project"
                 )
         );
     }
