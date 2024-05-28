@@ -14,9 +14,9 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(ProjectTaskNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleException(ProjectTaskNotFoundException e) {
-        return ResponseEntity.status(400).body(
+        return ResponseEntity.status(404).body(
                 new ErrorResponse(
-                        400L,
+                        404L,
                         "Task not found"
                 )
         );
@@ -64,9 +64,9 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleException(UserNotFoundException e) {
-        return ResponseEntity.status(400).body(
+        return ResponseEntity.status(404).body(
                 new ErrorResponse(
-                        400L,
+                        404L,
                         "User not found"
                 )
         );
@@ -74,9 +74,9 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(RoleNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResponse(RoleNotFoundException e) {
-        return ResponseEntity.status(400).body(
+        return ResponseEntity.status(404).body(
                 new ErrorResponse(
-                        400L,
+                        404L,
                         "Role not found"
                 )
         );
@@ -94,9 +94,9 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(ProjectNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResponse(ProjectNotFoundException e) {
-        return ResponseEntity.status(400).body(
+        return ResponseEntity.status(404).body(
                 new ErrorResponse(
-                        400L,
+                        404L,
                         "Project not found"
                 )
         );
@@ -104,9 +104,9 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(TagNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResponse(TagNotFoundException e) {
-        return ResponseEntity.status(400).body(
+        return ResponseEntity.status(404).body(
                 new ErrorResponse(
-                        400L,
+                        404L,
                         "Tag not found"
                 )
         );
@@ -114,9 +114,9 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(TimerRecordNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResponse(TimerRecordNotFoundException e) {
-        return ResponseEntity.status(400).body(
+        return ResponseEntity.status(404).body(
                 new ErrorResponse(
-                        400L,
+                        404L,
                         "Timer record not found"
                 )
         );

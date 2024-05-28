@@ -27,11 +27,11 @@ public class ProjectTask {
     private Project project;
 
     @Lob
-    @Column(name = "title")
+    @Column(name = "title", columnDefinition = "TEXT")
     private String title;
 
     @Lob
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "completed")

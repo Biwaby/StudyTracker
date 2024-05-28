@@ -28,6 +28,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final RoleRepo roleRepo;
 
     @Override
+    @Transactional
     public ProjectDTO createNewProject(ProjectDTO dto) {
         Project project = mapper.toEntity(dto);
         project.setUser(userService.getUserByAuth());

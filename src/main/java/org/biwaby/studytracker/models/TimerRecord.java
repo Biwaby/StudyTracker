@@ -29,7 +29,8 @@ public class TimerRecord {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "title")
+    @Lob
+    @Column(name = "title", columnDefinition = "TEXT")
     private String title;
 
     @Column(name = "start_time")

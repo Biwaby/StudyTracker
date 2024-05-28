@@ -1,0 +1,389 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1716752022231-1
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: project_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1716752022231-2
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: project_task_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1716752022231-3
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: tag_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1716752022231-4
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: timer_record_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1716752022231-5
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 1
+            sequenceName: user_id_seq
+            startValue: 1
+  - changeSet:
+      id: 1716752022231-6
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_lnk_user_roles
+                  name: role_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_lnk_user_roles
+                  name: user_id
+                  type: BIGINT
+            tableName: lnk_user_roles
+  - changeSet:
+      id: 1716752022231-7
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_project_tasks
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: project_id
+                  type: BIGINT
+              - column:
+                  name: title
+                  type: TEXT
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: completed
+                  type: BOOLEAN
+            tableName: project_tasks
+  - changeSet:
+      id: 1716752022231-8
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_projects
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  name: title
+                  type: TEXT
+              - column:
+                  name: description
+                  type: TEXT
+            tableName: projects
+  - changeSet:
+      id: 1716752022231-9
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: projects_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: tasks_id
+                  type: BIGINT
+            tableName: projects_tasks
+  - changeSet:
+      id: 1716752022231-10
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_roles
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: role
+                  type: VARCHAR(255)
+            tableName: roles
+  - changeSet:
+      id: 1716752022231-11
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tags
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+            tableName: tags
+  - changeSet:
+      id: 1716752022231-12
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_timer_records
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  name: title
+                  type: TEXT
+              - column:
+                  name: start_time
+                  type: DATETIME
+              - column:
+                  name: end_time
+                  type: DATETIME
+              - column:
+                  name: record_date
+                  type: DATETIME
+              - column:
+                  name: project_id
+                  type: BIGINT
+            tableName: timer_records
+  - changeSet:
+      id: 1716752022231-13
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_timer_records_tags
+                  name: tag_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_timer_records_tags
+                  name: timer_record_id
+                  type: BIGINT
+            tableName: timer_records_tags
+  - changeSet:
+      id: 1716752022231-14
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_users
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: username
+                  type: VARCHAR(255)
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  name: enabled
+                  type: BOOLEAN
+            tableName: users
+  - changeSet:
+      id: 1716752022231-15
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: tasks_id
+            constraintName: uc_projects_tasks_tasks
+            tableName: projects_tasks
+  - changeSet:
+      id: 1716752022231-16
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: projects
+            constraintName: FK_PROJECTS_ON_USER
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1716752022231-17
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: project_id
+            baseTableName: project_tasks
+            constraintName: FK_PROJECT_TASKS_ON_PROJECT
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: projects
+  - changeSet:
+      id: 1716752022231-18
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: tags
+            constraintName: FK_TAGS_ON_USER
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1716752022231-19
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: project_id
+            baseTableName: timer_records
+            constraintName: FK_TIMER_RECORDS_ON_PROJECT
+            referencedColumnNames: id
+            referencedTableName: projects
+  - changeSet:
+      id: 1716752022231-20
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: timer_records
+            constraintName: FK_TIMER_RECORDS_ON_USER
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1716752022231-21
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: lnk_user_roles
+            constraintName: fk_lnkuserol_on_role
+            referencedColumnNames: id
+            referencedTableName: roles
+  - changeSet:
+      id: 1716752022231-22
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: lnk_user_roles
+            constraintName: fk_lnkuserol_on_user
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1716752022231-23
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: projects_id
+            baseTableName: projects_tasks
+            constraintName: fk_protas_on_project
+            referencedColumnNames: id
+            referencedTableName: projects
+  - changeSet:
+      id: 1716752022231-24
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: tasks_id
+            baseTableName: projects_tasks
+            constraintName: fk_protas_on_project_task
+            referencedColumnNames: id
+            referencedTableName: project_tasks
+  - changeSet:
+      id: 1716752022231-25
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: tag_id
+            baseTableName: timer_records_tags
+            constraintName: fk_timrectag_on_tag
+            referencedColumnNames: id
+            referencedTableName: tags
+  - changeSet:
+      id: 1716752022231-26
+      author: Biwaby (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: timer_record_id
+            baseTableName: timer_records_tags
+            constraintName: fk_timrectag_on_timer_record
+            referencedColumnNames: id
+            referencedTableName: timer_records
+
