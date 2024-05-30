@@ -17,7 +17,7 @@ public class UseMockWithCustomUserSecurityContextFactory implements WithSecurity
     public SecurityContext createSecurityContext(UseMockWithCustomUser annotation) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
 
-        User user = new User(1L, "testUser", "1234", true, new HashSet<>(List.of(new Role(1L, "USER"))));
+        User user = new User(1L, "testingUser", "1234", true, new HashSet<>(List.of(new Role(1L, "USER"))));
         Authentication auth = UsernamePasswordAuthenticationToken.authenticated(user, "1234", user.getAuthorities());
         context.setAuthentication(auth);
         return context;

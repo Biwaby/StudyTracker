@@ -87,13 +87,13 @@ public class TimerRecordServiceTest {
                 new TimerRecordDTO(1L, "test record 1", formatedTime, formatedTime, formatedDate, null, new HashSet<>()),
                 new TimerRecordDTO(2L, "test record 2", formatedTime, formatedTime, formatedDate, existingProjectDTO, new HashSet<>())
         );
-        Page<TimerRecordDTO> expectedPage = new PageImpl<>(expectedPageList);
+        Page<TimerRecordDTO> expectedPage = new PageImpl<>(expectedPageList, PageRequest.of(0, 5), 2);
 
         List<TimerRecord> foundPageList = List.of(
                 new TimerRecord(1L, sessionUser, "test record 1", time, time, date, null, new HashSet<>()),
                 new TimerRecord(2L, sessionUser, "test record 2", time, time, date, existingProject, new HashSet<>())
         );
-        Page<TimerRecord> foundPage = new PageImpl<>(foundPageList);
+        Page<TimerRecord> foundPage = new PageImpl<>(foundPageList, PageRequest.of(0, 5), 2);
 
         Mockito.when(timerRecordRepo.findAllByUser(PageRequest.of(0, 5), sessionUser)).thenReturn(foundPage);
         assertEquals(expectedPage, timerRecordService.getAllRecords(0));

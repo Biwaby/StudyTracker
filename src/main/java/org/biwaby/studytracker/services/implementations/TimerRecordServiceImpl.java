@@ -66,7 +66,7 @@ public class TimerRecordServiceImpl implements TimerRecordService {
             dtoList.add(dto);
         }
 
-        return new PageImpl<>(dtoList);
+        return new PageImpl<>(dtoList, PageRequest.of(recordsObjPage.getPageable().getPageNumber(), recordsObjPage.getPageable().getPageSize()), recordsObjPage.getTotalElements());
     }
 
     @Override
