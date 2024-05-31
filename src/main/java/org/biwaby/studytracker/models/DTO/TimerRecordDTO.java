@@ -17,5 +17,6 @@ public class TimerRecordDTO {
     String endTime;
     String recordDate;
     ProjectDTO project;
+    ProjectTaskDTO projectTask;
     Set<TagDTO> tags = new HashSet<>();
 }

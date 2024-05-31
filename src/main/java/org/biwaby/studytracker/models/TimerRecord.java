@@ -50,6 +50,11 @@ public class TimerRecord {
     @Nullable
     private Project project;
 
+    @ManyToOne
+    @JoinColumn(name = "project_task_id")
+    @Nullable
+    private ProjectTask projectTask;
+
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "timer_records_tags",
             joinColumns = @JoinColumn(name = "timer_record_id"),

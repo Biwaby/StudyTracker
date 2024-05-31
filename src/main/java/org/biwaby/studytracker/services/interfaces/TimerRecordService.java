@@ -18,6 +18,8 @@ public interface TimerRecordService {
     TimerRecordDTO editRecord(Long id, TimerRecordDTO dto) throws ParseException;
     TimerRecordDTO addProjectToRecord(Long recordId, Long projectId);
     TimerRecordDTO removeProjectFromRecord(Long recordId, Long projectId);
+    TimerRecordDTO addTaskToRecord(Long recordId, Long taskId);
+    TimerRecordDTO removeTaskFromRecord(Long recordId);
     TimerRecordDTO addTagToRecord(Long recordId, Long tagId);
     TimerRecordDTO removeTagFromRecord(Long recordId, Long tagId);
     Page<TimerRecord> getAllRecordsByUser(String username, int page);

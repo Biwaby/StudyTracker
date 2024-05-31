@@ -12,6 +12,7 @@ import org.biwaby.studytracker.services.implementations.UserServiceImpl;
 import org.biwaby.studytracker.services.interfaces.TimerRecordService;
 import org.biwaby.studytracker.services.interfaces.UserService;
 import org.biwaby.studytracker.utils.MapperUtils.ProjectMapper;
+import org.biwaby.studytracker.utils.MapperUtils.ProjectTaskMapper;
 import org.biwaby.studytracker.utils.MapperUtils.TagMapper;
 import org.biwaby.studytracker.utils.MapperUtils.TimerRecordMapper;
 import org.biwaby.studytracker.utils.UseMockWithCustomUser;
@@ -49,10 +50,11 @@ public class TimerRecordServiceTest {
     private final TimerRecordMapper mapper = new TimerRecordMapper();
     private final TagMapper tagMapper = new TagMapper();
     private final ProjectMapper projectMapper = new ProjectMapper();
+    private final ProjectTaskMapper projectTaskMapper = new ProjectTaskMapper();
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private final UserService userService = new UserServiceImpl(userRepo, roleRepo, passwordEncoder, tagRepo, projectRepo, projectTaskRepo, timerRecordRepo);
-    private final TimerRecordService timerRecordService = new TimerRecordServiceImpl(timerRecordRepo, mapper, userService, roleRepo, userRepo, tagRepo, tagMapper, projectRepo, projectMapper);
+    private final TimerRecordService timerRecordService = new TimerRecordServiceImpl(timerRecordRepo, mapper, userService, roleRepo, userRepo, tagRepo, tagMapper, projectRepo, projectMapper, projectTaskMapper, projectTaskRepo);
 
 
     private final String formatedDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
@@ -67,10 +69,10 @@ public class TimerRecordServiceTest {
     @UseMockWithCustomUser
     void addRecord() throws ParseException {
         User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        TimerRecordDTO inputDTO = new TimerRecordDTO(null, "test record", formatedTime, formatedTime, formatedDate, null, new HashSet<>());
-        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, null, new HashSet<>());
-        TimerRecord savedRecord = new TimerRecord(null, sessionUser, "test record", time, time, date, null, new HashSet<>());
-        TimerRecord expectedRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, null, new HashSet<>());
+        TimerRecordDTO inputDTO = new TimerRecordDTO(null, "test record", formatedTime, formatedTime, formatedDate, null, null, new HashSet<>());
+        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, null, null, new HashSet<>());
+        TimerRecord savedRecord = new TimerRecord(null, sessionUser, "test record", time, time, date, null, null, new HashSet<>());
+        TimerRecord expectedRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, null, null, new HashSet<>());
 
         Mockito.when(timerRecordRepo.save(savedRecord)).thenReturn(expectedRecord);
         assertEquals(expectedDTO, timerRecordService.addRecord(inputDTO));
@@ -84,14 +86,14 @@ public class TimerRecordServiceTest {
         ProjectDTO existingProjectDTO = new ProjectDTO(1L, "test project", "test project desc");
 
         List<TimerRecordDTO> expectedPageList = List.of(
-                new TimerRecordDTO(1L, "test record 1", formatedTime, formatedTime, formatedDate, null, new HashSet<>()),
-                new TimerRecordDTO(2L, "test record 2", formatedTime, formatedTime, formatedDate, existingProjectDTO, new HashSet<>())
+                new TimerRecordDTO(1L, "test record 1", formatedTime, formatedTime, formatedDate, null, null, new HashSet<>()),
+                new TimerRecordDTO(2L, "test record 2", formatedTime, formatedTime, formatedDate, existingProjectDTO, null, new HashSet<>())
         );
         Page<TimerRecordDTO> expectedPage = new PageImpl<>(expectedPageList, PageRequest.of(0, 5), 2);
 
         List<TimerRecord> foundPageList = List.of(
-                new TimerRecord(1L, sessionUser, "test record 1", time, time, date, null, new HashSet<>()),
-                new TimerRecord(2L, sessionUser, "test record 2", time, time, date, existingProject, new HashSet<>())
+                new TimerRecord(1L, sessionUser, "test record 1", time, time, date, null, null, new HashSet<>()),
+                new TimerRecord(2L, sessionUser, "test record 2", time, time, date, existingProject, null, new HashSet<>())
         );
         Page<TimerRecord> foundPage = new PageImpl<>(foundPageList, PageRequest.of(0, 5), 2);
 
@@ -103,8 +105,8 @@ public class TimerRecordServiceTest {
     @UseMockWithCustomUser
     void getRecordById() {
         User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, null, new HashSet<>());
-        TimerRecord foundRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, null, new HashSet<>());
+        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, null, null, new HashSet<>());
+        TimerRecord foundRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, null, null, new HashSet<>());
 
         Mockito.when(roleRepo.findByAuthority("ADMIN")).thenReturn(Optional.of(new Role(2L, "ADMIN")));
         Mockito.when(timerRecordRepo.findById(1L)).thenReturn(Optional.of(foundRecord));
@@ -128,7 +130,7 @@ public class TimerRecordServiceTest {
         otherUser.setPassword("1234");
         otherUser.setEnabled(true);
 
-        TimerRecord foundRecord = new TimerRecord(1L, otherUser, "test record", time, time, date, null, new HashSet<>());
+        TimerRecord foundRecord = new TimerRecord(1L, otherUser, "test record", time, time, date, null, null, new HashSet<>());
 
         Mockito.when(roleRepo.findByAuthority("ADMIN")).thenReturn(Optional.of(new Role(2L, "ADMIN")));
         Mockito.when(timerRecordRepo.findById(1L)).thenReturn(Optional.of(foundRecord));
@@ -139,7 +141,7 @@ public class TimerRecordServiceTest {
     @UseMockWithCustomUser
     void deleteRecord() {
         User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        TimerRecord existingRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, null, new HashSet<>());
+        TimerRecord existingRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, null, null, new HashSet<>());
 
         Mockito.when(roleRepo.findByAuthority("ADMIN")).thenReturn(Optional.of(new Role(2L, "ADMIN")));
         Mockito.when(timerRecordRepo.findById(1L)).thenReturn(Optional.of(existingRecord));
@@ -164,7 +166,7 @@ public class TimerRecordServiceTest {
         otherUser.setPassword("1234");
         otherUser.setEnabled(true);
 
-        TimerRecord foundRecord = new TimerRecord(1L, otherUser, "test record", time, time, date, null, new HashSet<>());
+        TimerRecord foundRecord = new TimerRecord(1L, otherUser, "test record", time, time, date, null, null, new HashSet<>());
 
         Mockito.when(roleRepo.findByAuthority("ADMIN")).thenReturn(Optional.of(new Role(2L, "ADMIN")));
         Mockito.when(timerRecordRepo.findById(1L)).thenReturn(Optional.of(foundRecord));
@@ -175,12 +177,12 @@ public class TimerRecordServiceTest {
     @UseMockWithCustomUser
     void editRecord() throws ParseException {
         User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        TimerRecordDTO inputDTO = new TimerRecordDTO(null, "test record", formatedTime, formatedTime, formatedDate, null, new HashSet<>());
+        TimerRecordDTO inputDTO = new TimerRecordDTO(null, "test record", formatedTime, formatedTime, formatedDate, null, null, new HashSet<>());
         Project existingProject = new Project(1L, sessionUser, "test project", "test project desc", new ArrayList<>());
         ProjectDTO existingProjectDTO = new ProjectDTO(1L, "test project", "test project desc");
-        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "super duper test record", formatedTime, formatedTime, formatedDate, existingProjectDTO, new HashSet<>());
-        TimerRecord existingRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, existingProject, new HashSet<>());
-        TimerRecord expectedRecord = new TimerRecord(1L, sessionUser, "super duper test record", time, time, date, existingProject, new HashSet<>());
+        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "super duper test record", formatedTime, formatedTime, formatedDate, existingProjectDTO, null, new HashSet<>());
+        TimerRecord existingRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, existingProject, null, new HashSet<>());
+        TimerRecord expectedRecord = new TimerRecord(1L, sessionUser, "super duper test record", time, time, date, existingProject, null, new HashSet<>());
 
         Mockito.when(roleRepo.findByAuthority("ADMIN")).thenReturn(Optional.of(new Role(2L, "ADMIN")));
         Mockito.when(timerRecordRepo.findById(1L)).thenReturn(Optional.of(existingRecord));
@@ -205,7 +207,7 @@ public class TimerRecordServiceTest {
         otherUser.setPassword("1234");
         otherUser.setEnabled(true);
 
-        TimerRecord foundRecord = new TimerRecord(1L, otherUser, "test record", time, time, date, null, new HashSet<>());
+        TimerRecord foundRecord = new TimerRecord(1L, otherUser, "test record", time, time, date, null, null, new HashSet<>());
 
         Mockito.when(roleRepo.findByAuthority("ADMIN")).thenReturn(Optional.of(new Role(2L, "ADMIN")));
         Mockito.when(timerRecordRepo.findById(1L)).thenReturn(Optional.of(foundRecord));
@@ -218,9 +220,9 @@ public class TimerRecordServiceTest {
         User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Project existingProject = new Project(1L, sessionUser, "test project", "test project desc", new ArrayList<>());
         ProjectDTO existingProjectDTO = new ProjectDTO(1L, "test project", "test project desc");
-        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, existingProjectDTO, new HashSet<>());
-        TimerRecord existingRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, null, new HashSet<>());
-        TimerRecord expectedRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, existingProject, new HashSet<>());
+        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, existingProjectDTO, null, new HashSet<>());
+        TimerRecord existingRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, null, null, new HashSet<>());
+        TimerRecord expectedRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, existingProject, null, new HashSet<>());
 
         Mockito.when(roleRepo.findByAuthority("ADMIN")).thenReturn(Optional.of(new Role(2L, "ADMIN")));
         Mockito.when(timerRecordRepo.findById(1L)).thenReturn(Optional.of(existingRecord));
@@ -246,7 +248,7 @@ public class TimerRecordServiceTest {
         otherUser.setPassword("1234");
         otherUser.setEnabled(true);
 
-        TimerRecord foundRecord = new TimerRecord(1L, otherUser, "test record", time, time, date, null, new HashSet<>());
+        TimerRecord foundRecord = new TimerRecord(1L, otherUser, "test record", time, time, date, null, null, new HashSet<>());
 
         Mockito.when(roleRepo.findByAuthority("ADMIN")).thenReturn(Optional.of(new Role(2L, "ADMIN")));
         Mockito.when(timerRecordRepo.findById(1L)).thenReturn(Optional.of(foundRecord));
@@ -258,9 +260,10 @@ public class TimerRecordServiceTest {
     void removeProjectFromRecord() {
         User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Project existingProject = new Project(1L, sessionUser, "test project", "test project desc", new ArrayList<>());
-        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, null, new HashSet<>());
-        TimerRecord existingRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, existingProject, new HashSet<>());
-        TimerRecord expectedRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, null, new HashSet<>());
+        ProjectTask existingTask = new ProjectTask(1L, existingProject, "test task", "test task desc", false);
+        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, null, null, new HashSet<>());
+        TimerRecord existingRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, existingProject, existingTask, new HashSet<>());
+        TimerRecord expectedRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, null, null, new HashSet<>());
 
         Mockito.when(roleRepo.findByAuthority("ADMIN")).thenReturn(Optional.of(new Role(2L, "ADMIN")));
         Mockito.when(timerRecordRepo.findById(1L)).thenReturn(Optional.of(existingRecord));
@@ -286,7 +289,7 @@ public class TimerRecordServiceTest {
         otherUser.setPassword("1234");
         otherUser.setEnabled(true);
 
-        TimerRecord foundRecord = new TimerRecord(1L, otherUser, "test record", time, time, date, null, new HashSet<>());
+        TimerRecord foundRecord = new TimerRecord(1L, otherUser, "test record", time, time, date, null, null, new HashSet<>());
 
         Mockito.when(roleRepo.findByAuthority("ADMIN")).thenReturn(Optional.of(new Role(2L, "ADMIN")));
         Mockito.when(timerRecordRepo.findById(1L)).thenReturn(Optional.of(foundRecord));
@@ -299,9 +302,9 @@ public class TimerRecordServiceTest {
         User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Tag existingTag = new Tag(1L, sessionUser, "test tag");
         TagDTO existingTagDTO = new TagDTO(1L, "test tag");
-        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, null, Set.of(existingTagDTO));
-        TimerRecord existingRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, null, new HashSet<>());
-        TimerRecord expectedRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, null, Set.of(existingTag));
+        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, null, null, Set.of(existingTagDTO));
+        TimerRecord existingRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, null, null, new HashSet<>());
+        TimerRecord expectedRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, null, null, Set.of(existingTag));
 
         Mockito.when(roleRepo.findByAuthority("ADMIN")).thenReturn(Optional.of(new Role(2L, "ADMIN")));
         Mockito.when(timerRecordRepo.findById(1L)).thenReturn(Optional.of(existingRecord));
@@ -327,7 +330,7 @@ public class TimerRecordServiceTest {
         otherUser.setPassword("1234");
         otherUser.setEnabled(true);
 
-        TimerRecord foundRecord = new TimerRecord(1L, otherUser, "test record", time, time, date, null, new HashSet<>());
+        TimerRecord foundRecord = new TimerRecord(1L, otherUser, "test record", time, time, date, null, null, new HashSet<>());
 
         Mockito.when(roleRepo.findByAuthority("ADMIN")).thenReturn(Optional.of(new Role(2L, "ADMIN")));
         Mockito.when(timerRecordRepo.findById(1L)).thenReturn(Optional.of(foundRecord));
@@ -339,9 +342,9 @@ public class TimerRecordServiceTest {
     void removeTagFromRecord() {
         User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Tag existingTag = new Tag(1L, sessionUser, "test tag");
-        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, null, new HashSet<>());
-        TimerRecord existingRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, null, new HashSet<>(Set.of(existingTag)));
-        TimerRecord expectedRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, null, new HashSet<>());
+        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, null, null, new HashSet<>());
+        TimerRecord existingRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, null, null, new HashSet<>(List.of(existingTag)));
+        TimerRecord expectedRecord = new TimerRecord(1L, sessionUser, "test record", time, time, date, null, null, new HashSet<>());
 
         Mockito.when(roleRepo.findByAuthority("ADMIN")).thenReturn(Optional.of(new Role(2L, "ADMIN")));
         Mockito.when(timerRecordRepo.findById(1L)).thenReturn(Optional.of(existingRecord));
@@ -367,7 +370,7 @@ public class TimerRecordServiceTest {
         otherUser.setPassword("1234");
         otherUser.setEnabled(true);
 
-        TimerRecord foundRecord = new TimerRecord(1L, otherUser, "test record", time, time, date, null, new HashSet<>());
+        TimerRecord foundRecord = new TimerRecord(1L, otherUser, "test record", time, time, date, null, null, new HashSet<>());
 
         Mockito.when(roleRepo.findByAuthority("ADMIN")).thenReturn(Optional.of(new Role(2L, "ADMIN")));
         Mockito.when(timerRecordRepo.findById(1L)).thenReturn(Optional.of(foundRecord));
@@ -380,14 +383,14 @@ public class TimerRecordServiceTest {
         User sessionUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         List<TimerRecord> foundPageList = List.of(
-                new TimerRecord(1L, sessionUser, "test record 1", time, time, date, null, new HashSet<>()),
-                new TimerRecord(2L, sessionUser, "test record 2", time, time, date, null, new HashSet<>())
+                new TimerRecord(1L, sessionUser, "test record 1", time, time, date, null, null, new HashSet<>()),
+                new TimerRecord(2L, sessionUser, "test record 2", time, time, date, null, null, new HashSet<>())
         );
         Page<TimerRecord> foundPage = new PageImpl<>(foundPageList);
 
         List<TimerRecord> expectedPageList = List.of(
-                new TimerRecord(1L, sessionUser, "test record 1", time, time, date, null, new HashSet<>()),
-                new TimerRecord(2L, sessionUser, "test record 2", time, time, date, null, new HashSet<>())
+                new TimerRecord(1L, sessionUser, "test record 1", time, time, date, null, null, new HashSet<>()),
+                new TimerRecord(2L, sessionUser, "test record 2", time, time, date, null, null, new HashSet<>())
         );
         Page<TimerRecord> expectedPage = new PageImpl<>(expectedPageList);
 

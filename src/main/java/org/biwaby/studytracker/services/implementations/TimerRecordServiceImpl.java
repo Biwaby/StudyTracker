@@ -2,20 +2,15 @@ package org.biwaby.studytracker.services.implementations;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.biwaby.studytracker.exceptions.NotFoundExceptions.ProjectNotFoundException;
-import org.biwaby.studytracker.exceptions.NotFoundExceptions.TagNotFoundException;
-import org.biwaby.studytracker.exceptions.NotFoundExceptions.TimerRecordNotFoundException;
-import org.biwaby.studytracker.exceptions.NotFoundExceptions.UserNotFoundException;
-import org.biwaby.studytracker.exceptions.RecordAlreadyHasProjectException;
-import org.biwaby.studytracker.exceptions.RecordAlreadyHasTagException;
-import org.biwaby.studytracker.exceptions.RecordDoesNotHaveProjectException;
-import org.biwaby.studytracker.exceptions.RecordDoesNotHaveTagException;
+import org.biwaby.studytracker.exceptions.*;
+import org.biwaby.studytracker.exceptions.NotFoundExceptions.*;
 import org.biwaby.studytracker.models.*;
 import org.biwaby.studytracker.models.DTO.TimerRecordDTO;
 import org.biwaby.studytracker.repositories.*;
 import org.biwaby.studytracker.services.interfaces.TimerRecordService;
 import org.biwaby.studytracker.services.interfaces.UserService;
 import org.biwaby.studytracker.utils.MapperUtils.ProjectMapper;
+import org.biwaby.studytracker.utils.MapperUtils.ProjectTaskMapper;
 import org.biwaby.studytracker.utils.MapperUtils.TagMapper;
 import org.biwaby.studytracker.utils.MapperUtils.TimerRecordMapper;
 import org.springframework.data.domain.Page;
@@ -41,6 +36,8 @@ public class TimerRecordServiceImpl implements TimerRecordService {
     private final TagMapper tagMapper;
     private final ProjectRepo projectRepo;
     private final ProjectMapper projectMapper;
+    private final ProjectTaskMapper projectTaskMapper;
+    private final ProjectTaskRepo projectTaskRepo;
 
     @Override
     public TimerRecordDTO addRecord(TimerRecordDTO dto) throws ParseException {
@@ -62,6 +59,9 @@ public class TimerRecordServiceImpl implements TimerRecordService {
             if (record.getProject() != null) {
                 dto.setProject(projectMapper.toDTO(record.getProject()));
             }
+            if (record.getProjectTask() != null) {
+                dto.setProjectTask(projectTaskMapper.toDTO(record.getProjectTask()));
+            }
             record.getTags().forEach(tagObj -> dto.getTags().add(tagMapper.toDTO(tagObj)));
             dtoList.add(dto);
         }
@@ -82,6 +82,9 @@ public class TimerRecordServiceImpl implements TimerRecordService {
         TimerRecordDTO dto = TimerRecordMapper.toDTO(record);
         if (record.getProject() != null) {
             dto.setProject(projectMapper.toDTO(record.getProject()));
+        }
+        if (record.getProjectTask() != null) {
+            dto.setProjectTask(projectTaskMapper.toDTO(record.getProjectTask()));
         }
         record.getTags().forEach(tagObj -> dto.getTags().add(tagMapper.toDTO(tagObj)));
         return dto;
@@ -116,6 +119,9 @@ public class TimerRecordServiceImpl implements TimerRecordService {
         TimerRecordDTO recordDTO = TimerRecordMapper.toDTO(record);
         if (record.getProject() != null) {
             recordDTO.setProject(projectMapper.toDTO(record.getProject()));
+        }
+        if (record.getProjectTask() != null) {
+            recordDTO.setProjectTask(projectTaskMapper.toDTO(record.getProjectTask()));
         }
         record.getTags().forEach(tagObj -> recordDTO.getTags().add(tagMapper.toDTO(tagObj)));
 
@@ -171,10 +177,92 @@ public class TimerRecordServiceImpl implements TimerRecordService {
         }
 
         record.setProject(null);
+        record.setProjectTask(null);
         record = timerRecordRepo.save(record);
         TimerRecordDTO dto = TimerRecordMapper.toDTO(record);
         if (record.getProject() != null) {
             dto.setProject(projectMapper.toDTO(record.getProject()));
+        }
+        if (record.getProjectTask() != null) {
+            dto.setProjectTask(projectTaskMapper.toDTO(record.getProjectTask()));
+        }
+        record.getTags().forEach(tagObj -> dto.getTags().add(tagMapper.toDTO(tagObj)));
+        return dto;
+    }
+
+    @Override
+    public TimerRecordDTO addTaskToRecord(Long recordId, Long taskId) {
+        User user = userService.getUserByAuth();
+        Role admin = roleRepo.findByAuthority("ADMIN").get();
+        TimerRecord record = timerRecordRepo.findById(recordId).orElseThrow(TimerRecordNotFoundException::new);
+
+        if (!record.getUser().getId().equals(user.getId()) && !user.getAuthorities().contains(admin)) {
+            throw new AccessDeniedException("No access");
+        }
+
+        Project project = record.getProject();
+
+        if (project == null) {
+            throw new RecordDoesNotHaveProjectException();
+        }
+        if (!project.getUser().getId().equals(user.getId()) && !user.getAuthorities().contains(admin)) {
+            throw new AccessDeniedException("No access");
+        }
+
+        ProjectTask task = projectTaskRepo.findById(taskId).orElseThrow(ProjectTaskNotFoundException::new);
+
+        if (!project.getId().equals(task.getProject().getId())) {
+            throw new AccessDeniedException("No access");
+        }
+
+        if (task.isCompleted()) {
+            throw new ProjectTaskAlreadyCompletedException();
+        }
+
+        record.setProjectTask(task);
+        record = timerRecordRepo.save(record);
+        TimerRecordDTO dto = TimerRecordMapper.toDTO(record);
+        if (record.getProject() != null) {
+            dto.setProject(projectMapper.toDTO(record.getProject()));
+        }
+        if (record.getProjectTask() != null) {
+            dto.setProjectTask(projectTaskMapper.toDTO(record.getProjectTask()));
+        }
+        record.getTags().forEach(tagObj -> dto.getTags().add(tagMapper.toDTO(tagObj)));
+        return dto;
+    }
+
+    @Override
+    public TimerRecordDTO removeTaskFromRecord(Long recordId) {
+        User user = userService.getUserByAuth();
+        Role admin = roleRepo.findByAuthority("ADMIN").get();
+        TimerRecord record = timerRecordRepo.findById(recordId).orElseThrow(TimerRecordNotFoundException::new);
+
+        if (!record.getUser().getId().equals(user.getId()) && !user.getAuthorities().contains(admin)) {
+            throw new AccessDeniedException("No access");
+        }
+
+        Project project = record.getProject();
+
+        if (project == null) {
+            throw new RecordDoesNotHaveProjectException();
+        }
+        if (!project.getUser().getId().equals(user.getId()) && !user.getAuthorities().contains(admin)) {
+            throw new AccessDeniedException("No access");
+        }
+
+        if (record.getProjectTask() == null) {
+            throw new RecordDoesNotHaveProjectTaskException();
+        }
+
+        record.setProjectTask(null);
+        record = timerRecordRepo.save(record);
+        TimerRecordDTO dto = TimerRecordMapper.toDTO(record);
+        if (record.getProject() != null) {
+            dto.setProject(projectMapper.toDTO(record.getProject()));
+        }
+        if (record.getProjectTask() != null) {
+            dto.setProjectTask(projectTaskMapper.toDTO(record.getProjectTask()));
         }
         record.getTags().forEach(tagObj -> dto.getTags().add(tagMapper.toDTO(tagObj)));
         return dto;
@@ -205,6 +293,9 @@ public class TimerRecordServiceImpl implements TimerRecordService {
         if (record.getProject() != null) {
             dto.setProject(projectMapper.toDTO(record.getProject()));
         }
+        if (record.getProjectTask() != null) {
+            dto.setProjectTask(projectTaskMapper.toDTO(record.getProjectTask()));
+        }
         record.getTags().forEach(tagObj -> dto.getTags().add(tagMapper.toDTO(tagObj)));
         return dto;
     }
@@ -233,6 +324,9 @@ public class TimerRecordServiceImpl implements TimerRecordService {
         TimerRecordDTO dto = TimerRecordMapper.toDTO(record);
         if (record.getProject() != null) {
             dto.setProject(projectMapper.toDTO(record.getProject()));
+        }
+        if (record.getProjectTask() != null) {
+            dto.setProjectTask(projectTaskMapper.toDTO(record.getProjectTask()));
         }
         record.getTags().forEach(tagObj -> dto.getTags().add(tagMapper.toDTO(tagObj)));
         return dto;

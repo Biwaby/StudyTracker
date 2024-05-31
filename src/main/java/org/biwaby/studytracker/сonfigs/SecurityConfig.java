@@ -30,6 +30,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/projects/**").authenticated()
                                 .requestMatchers(HttpMethod.GET, "/tags").authenticated()
                                 .requestMatchers(HttpMethod.GET, "/tags/**").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/summary/**").authenticated()
                                 // POST
                                 .requestMatchers(HttpMethod.POST, "/timer/record").authenticated()
                                 .requestMatchers(HttpMethod.POST, "/projects/create").authenticated()
@@ -41,6 +42,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.PUT, "/timer/removeTag").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/timer/addProject").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/timer/removeProject").authenticated()
+                                .requestMatchers(HttpMethod.PUT, "/timer/addTask").authenticated()
+                                .requestMatchers(HttpMethod.PUT, "/timer/removeTask").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/projects/edit").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/projects/tasks/edit").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/tags/edit").authenticated()
@@ -52,8 +55,6 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.DELETE, "/users/delete").authenticated()
                                 // only fon admin users
                                 .requestMatchers("/admin/**").hasAuthority("ADMIN")
-                                //.requestMatchers("/admin/roles").hasAuthority("ADMIN")
-                                //.requestMatchers("/admin/roles/**").hasAuthority("ADMIN")
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())

@@ -61,4 +61,14 @@ public class TimerRecordController {
     ResponseEntity<TimerRecordDTO> removeProjectFromRecord(@RequestParam Long recordId, @RequestParam Long projectId) {
         return ResponseEntity.ok(timerRecordService.removeProjectFromRecord(recordId, projectId));
     }
+
+    @PutMapping("/addTask")
+    ResponseEntity<TimerRecordDTO> addTaskToRecord(@RequestParam Long recordId, @RequestParam Long taskId) {
+        return ResponseEntity.ok(timerRecordService.addTaskToRecord(recordId, taskId));
+    }
+
+    @PutMapping("/removeTask")
+    ResponseEntity<TimerRecordDTO> removeTaskFromRecord(@RequestParam Long recordId) {
+        return ResponseEntity.ok(timerRecordService.removeTaskFromRecord(recordId));
+    }
 }

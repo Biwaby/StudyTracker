@@ -161,4 +161,24 @@ public class ExceptionsHandler {
                 )
         );
     }
+
+    @ExceptionHandler(NoSuchRecordsException.class)
+    public ResponseEntity<ErrorResponse> handleResponse(NoSuchRecordsException e) {
+        return ResponseEntity.status(404).body(
+                new ErrorResponse(
+                        404L,
+                        "No records found"
+                )
+        );
+    }
+
+    @ExceptionHandler(RecordDoesNotHaveProjectTaskException.class)
+    public ResponseEntity<ErrorResponse> handleResponse(RecordDoesNotHaveProjectTaskException e) {
+        return ResponseEntity.status(404).body(
+                new ErrorResponse(
+                        404L,
+                        "Record doesn't have task"
+                )
+        );
+    }
 }

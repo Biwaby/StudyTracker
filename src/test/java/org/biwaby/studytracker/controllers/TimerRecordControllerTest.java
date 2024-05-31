@@ -1,12 +1,11 @@
 package org.biwaby.studytracker.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.biwaby.studytracker.models.*;
-import org.biwaby.studytracker.models.DTO.TagDTO;
 import org.biwaby.studytracker.models.DTO.TimerRecordDTO;
 import org.biwaby.studytracker.repositories.*;
 import org.biwaby.studytracker.utils.MapperUtils.ProjectMapper;
+import org.biwaby.studytracker.utils.MapperUtils.ProjectTaskMapper;
 import org.biwaby.studytracker.utils.MapperUtils.TagMapper;
 import org.biwaby.studytracker.utils.MapperUtils.TimerRecordMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,11 +49,15 @@ public class TimerRecordControllerTest {
     @Autowired
     private ProjectRepo projectRepo;
     @Autowired
+    private ProjectTaskRepo projectTaskRepo;
+    @Autowired
     private TagRepo tagRepo;
     @Autowired
     private TimerRecordMapper timerRecordMapper;
     @Autowired
     private ProjectMapper projectMapper;
+    @Autowired
+    private ProjectTaskMapper projectTaskMapper;
     @Autowired
     private TagMapper tagMapper;
     @Autowired
@@ -106,8 +109,8 @@ public class TimerRecordControllerTest {
 
     @Test
     void addRecord() throws Exception {
-        TimerRecordDTO inputDTO = new TimerRecordDTO(null, "test record", formatedTime, formatedTime, formatedDate, null, new HashSet<>());
-        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, null, new HashSet<>());
+        TimerRecordDTO inputDTO = new TimerRecordDTO(null, "test record", formatedTime, formatedTime, formatedDate, null, null, new HashSet<>());
+        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, null, null, new HashSet<>());
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/timer/record")
@@ -123,8 +126,8 @@ public class TimerRecordControllerTest {
     void getAllRecords() throws Exception {
         User sessionUser = userRepo.findByUsername("testUser").get();
         List<TimerRecordDTO> expectedPageList = List.of(
-                TimerRecordMapper.toDTO(timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record 1", time, time, date, null, new HashSet<>()))),
-                TimerRecordMapper.toDTO(timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record 2", time, time, date, null, new HashSet<>())))
+                TimerRecordMapper.toDTO(timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record 1", time, time, date, null, null, new HashSet<>()))),
+                TimerRecordMapper.toDTO(timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record 2", time, time, date, null, null, new HashSet<>())))
         );
         Page<TimerRecordDTO> expectedPage = new PageImpl<>(expectedPageList, PageRequest.of(0, 5), 2);
 
@@ -140,7 +143,7 @@ public class TimerRecordControllerTest {
     @Test
     void getRecordById() throws Exception {
         User sessionUser = userRepo.findByUsername("testUser").get();
-        TimerRecordDTO expectedDTO = TimerRecordMapper.toDTO(timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record", time, time, date, null, new HashSet<>())));
+        TimerRecordDTO expectedDTO = TimerRecordMapper.toDTO(timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record", time, time, date, null, null, new HashSet<>())));
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/timer/1")
@@ -164,7 +167,7 @@ public class TimerRecordControllerTest {
     @Test
     void getOtherUserRecord() throws Exception {
         User otherUser = userRepo.findByUsername("otherTestUser").get();
-        timerRecordRepo.save(new TimerRecord(null,  otherUser, "test record", time, time, date, null, new HashSet<>()));
+        timerRecordRepo.save(new TimerRecord(null,  otherUser, "test record", time, time, date, null, null, new HashSet<>()));
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/timer/1")
@@ -177,7 +180,7 @@ public class TimerRecordControllerTest {
     @Test
     void deleteRecord() throws Exception {
         User sessionUser = userRepo.findByUsername("testUser").get();
-        timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record", time, time, date, null, new HashSet<>()));
+        timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record", time, time, date, null, null, new HashSet<>()));
 
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/timer/delete?recordId=1")
@@ -200,7 +203,7 @@ public class TimerRecordControllerTest {
     @Test
     void deleteOtherUserRecord() throws Exception {
         User otherUser = userRepo.findByUsername("otherTestUser").get();
-        timerRecordRepo.save(new TimerRecord(null,  otherUser, "test record", time, time, date, null, new HashSet<>()));
+        timerRecordRepo.save(new TimerRecord(null,  otherUser, "test record", time, time, date, null, null, new HashSet<>()));
 
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/timer/delete?recordId=1")
@@ -213,9 +216,9 @@ public class TimerRecordControllerTest {
     @Test
     void editRecord() throws Exception {
         User sessionUser = userRepo.findByUsername("testUser").get();
-        TimerRecordDTO inputDTO = new TimerRecordDTO(null, "super duper test record", formatedTime, formatedTime, formatedDate, null, new HashSet<>());
-        timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record", time, time, date, null, new HashSet<>()));
-        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "super duper test record", formatedTime, formatedTime, formatedDate, null, new HashSet<>());
+        TimerRecordDTO inputDTO = new TimerRecordDTO(null, "super duper test record", formatedTime, formatedTime, formatedDate, null, null, new HashSet<>());
+        timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record", time, time, date, null, null, new HashSet<>()));
+        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "super duper test record", formatedTime, formatedTime, formatedDate, null, null, new HashSet<>());
 
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/timer/edit?recordId=1")
@@ -229,7 +232,7 @@ public class TimerRecordControllerTest {
 
     @Test
     void editNonExistingRecord() throws Exception {
-        TimerRecordDTO inputDTO = new TimerRecordDTO(null, "test record", formatedTime, formatedTime, formatedDate, null, new HashSet<>());
+        TimerRecordDTO inputDTO = new TimerRecordDTO(null, "test record", formatedTime, formatedTime, formatedDate, null, null, new HashSet<>());
 
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/timer/edit?recordId=55")
@@ -243,8 +246,8 @@ public class TimerRecordControllerTest {
     @Test
     void editOtherUserRecord() throws Exception {
         User otherUser = userRepo.findByUsername("otherTestUser").get();
-        timerRecordRepo.save(new TimerRecord(null,  otherUser, "test record", time, time, date, null, new HashSet<>()));
-        TimerRecordDTO inputDTO = new TimerRecordDTO(null, "test record", formatedTime, formatedTime, formatedDate, null, new HashSet<>());
+        timerRecordRepo.save(new TimerRecord(null,  otherUser, "test record", time, time, date, null, null, new HashSet<>()));
+        TimerRecordDTO inputDTO = new TimerRecordDTO(null, "test record", formatedTime, formatedTime, formatedDate, null, null, new HashSet<>());
 
         mockMvc.perform(
                         MockMvcRequestBuilders.put("/timer/edit?recordId=1")
@@ -258,9 +261,9 @@ public class TimerRecordControllerTest {
     @Test
     void addProjectToRecord() throws Exception {
         User sessionUser = userRepo.findByUsername("testUser").get();
-        timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record", time, time, date, null, new HashSet<>()));
+        timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record", time, time, date, null, null, new HashSet<>()));
         Project existingProject = projectRepo.save(new Project(null, sessionUser, "test project", "test project desc", new ArrayList<>()));
-        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, projectMapper.toDTO(existingProject), new HashSet<>());
+        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, projectMapper.toDTO(existingProject), null, new HashSet<>());
 
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/timer/addProject?recordId=1&projectId=1")
@@ -284,7 +287,7 @@ public class TimerRecordControllerTest {
     @Test
     void addProjectToOtherUserRecord() throws Exception {
         User otherUser = userRepo.findByUsername("otherTestUser").get();
-        timerRecordRepo.save(new TimerRecord(null,  otherUser, "test record", time, time, date, null, new HashSet<>()));
+        timerRecordRepo.save(new TimerRecord(null,  otherUser, "test record", time, time, date, null, null, new HashSet<>()));
 
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/timer/addProject?recordId=1&projectId=1")
@@ -298,8 +301,9 @@ public class TimerRecordControllerTest {
     void removeProjectFromRecord() throws Exception {
         User sessionUser = userRepo.findByUsername("testUser").get();
         Project existingProject = projectRepo.save(new Project(null, sessionUser, "test project", "test project desc", new ArrayList<>()));
-        timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record", time, time, date, existingProject, new HashSet<>()));
-        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, null, new HashSet<>());
+        ProjectTask existingTask = projectTaskRepo.save(new ProjectTask(null, existingProject, "test task", "test task desc", false));
+        timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record", time, time, date, existingProject, existingTask, new HashSet<>()));
+        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, null, null, new HashSet<>());
 
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/timer/removeProject?recordId=1&projectId=1")
@@ -323,7 +327,7 @@ public class TimerRecordControllerTest {
     @Test
     void removeProjectFromOtherUserRecord() throws Exception {
         User otherUser = userRepo.findByUsername("otherTestUser").get();
-        timerRecordRepo.save(new TimerRecord(null,  otherUser, "test record", time, time, date, null, new HashSet<>()));
+        timerRecordRepo.save(new TimerRecord(null,  otherUser, "test record", time, time, date, null, null, new HashSet<>()));
 
         mockMvc.perform(
                         MockMvcRequestBuilders.put("/timer/removeProject?recordId=1&projectId=1")
@@ -336,9 +340,9 @@ public class TimerRecordControllerTest {
     @Test
     void addTagToRecord() throws Exception {
         User sessionUser = userRepo.findByUsername("testUser").get();
-        timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record", time, time, date, null, new HashSet<>()));
+        timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record", time, time, date, null, null, new HashSet<>()));
         Tag existingTag = tagRepo.save(new Tag(null, sessionUser, "test tag"));
-        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, null, new HashSet<>(List.of(tagMapper.toDTO(existingTag))));
+        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, null, null, new HashSet<>(List.of(tagMapper.toDTO(existingTag))));
 
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/timer/addTag?recordId=1&tagId=1")
@@ -362,7 +366,7 @@ public class TimerRecordControllerTest {
     @Test
     void addTagToOtherUserRecord() throws Exception {
         User otherUser = userRepo.findByUsername("otherTestUser").get();
-        timerRecordRepo.save(new TimerRecord(null,  otherUser, "test record", time, time, date, null, new HashSet<>()));
+        timerRecordRepo.save(new TimerRecord(null,  otherUser, "test record", time, time, date, null, null, new HashSet<>()));
 
         mockMvc.perform(
                         MockMvcRequestBuilders.put("/timer/addTag?recordId=1&tagId=1")
@@ -376,8 +380,8 @@ public class TimerRecordControllerTest {
     void removeTagFromRecord() throws Exception {
         User sessionUser = userRepo.findByUsername("testUser").get();
         Tag existingTag = tagRepo.save(new Tag(null, sessionUser, "test tag"));
-        timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record", time, time, date, null, new HashSet<>(List.of(existingTag))));
-        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, null, new HashSet<>());
+        timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record", time, time, date, null, null, new HashSet<>(List.of(existingTag))));
+        TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, null, null, new HashSet<>());
 
         mockMvc.perform(
                         MockMvcRequestBuilders.put("/timer/removeTag?recordId=1&tagId=1")
@@ -401,7 +405,7 @@ public class TimerRecordControllerTest {
     @Test
     void removeTagFromOtherUserRecord() throws Exception {
         User otherUser = userRepo.findByUsername("otherTestUser").get();
-        timerRecordRepo.save(new TimerRecord(null,  otherUser, "test record", time, time, date, null, new HashSet<>()));
+        timerRecordRepo.save(new TimerRecord(null,  otherUser, "test record", time, time, date, null, null, new HashSet<>()));
 
         mockMvc.perform(
                         MockMvcRequestBuilders.put("/timer/removeTag?recordId=1&tagId=1")
@@ -415,8 +419,8 @@ public class TimerRecordControllerTest {
     void getAllRecordsByUser() throws Exception {
         User sessionUser = userRepo.findByUsername("testUser").get();
         List<TimerRecord> expectedPageList = List.of(
-                timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record 1", time, time, date, null, new HashSet<>())),
-                timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record 2", time, time, date, null, new HashSet<>()))
+                timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record 1", time, time, date, null, null, new HashSet<>())),
+                timerRecordRepo.save(new TimerRecord(null,  sessionUser, "test record 2", time, time, date, null, null, new HashSet<>()))
         );
         Page<TimerRecord> expectedPage = new PageImpl<>(expectedPageList, PageRequest.of(0, 5), 2);
 
