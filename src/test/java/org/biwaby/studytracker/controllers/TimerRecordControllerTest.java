@@ -306,7 +306,7 @@ public class TimerRecordControllerTest {
         TimerRecordDTO expectedDTO = new TimerRecordDTO(1L, "test record", formatedTime, formatedTime, formatedDate, null, null, new HashSet<>());
 
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/timer/removeProject?recordId=1&projectId=1")
+                MockMvcRequestBuilders.put("/timer/removeProject?recordId=1")
                         .with(httpBasic("testUser", "1234"))
         )
                 .andDo(MockMvcResultHandlers.print())
@@ -317,7 +317,7 @@ public class TimerRecordControllerTest {
     @Test
     void removeProjectFromNonExistingRecord() throws Exception {
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/timer/removeProject?recordId=55&projectId=1")
+                MockMvcRequestBuilders.put("/timer/removeProject?recordId=55")
                         .with(httpBasic("testUser", "1234"))
         )
                 .andDo(MockMvcResultHandlers.print())
@@ -330,7 +330,7 @@ public class TimerRecordControllerTest {
         timerRecordRepo.save(new TimerRecord(null,  otherUser, "test record", time, time, date, null, null, new HashSet<>()));
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.put("/timer/removeProject?recordId=1&projectId=1")
+                        MockMvcRequestBuilders.put("/timer/removeProject?recordId=1")
                                 .with(httpBasic("testUser", "1234"))
                 )
                 .andDo(MockMvcResultHandlers.print())

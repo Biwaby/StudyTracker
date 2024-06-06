@@ -158,7 +158,7 @@ public class TimerRecordServiceImpl implements TimerRecordService {
     }
 
     @Override
-    public TimerRecordDTO removeProjectFromRecord(Long recordId, Long projectId) {
+    public TimerRecordDTO removeProjectFromRecord(Long recordId) {
         User user = userService.getUserByAuth();
         Role admin = roleRepo.findByAuthority("ADMIN").get();
         TimerRecord record = timerRecordRepo.findById(recordId).orElseThrow(TimerRecordNotFoundException::new);
@@ -167,11 +167,6 @@ public class TimerRecordServiceImpl implements TimerRecordService {
             throw new AccessDeniedException("No access");
         }
 
-        Project project = projectRepo.findById(projectId).orElseThrow(ProjectNotFoundException::new);
-
-        if (!project.getUser().getId().equals(user.getId()) && !user.getAuthorities().contains(admin)) {
-            throw new AccessDeniedException("No access");
-        }
         if (record.getProject() == null) {
             throw new RecordDoesNotHaveProjectException();
         }

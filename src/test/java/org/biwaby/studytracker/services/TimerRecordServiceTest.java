@@ -267,9 +267,8 @@ public class TimerRecordServiceTest {
 
         Mockito.when(roleRepo.findByAuthority("ADMIN")).thenReturn(Optional.of(new Role(2L, "ADMIN")));
         Mockito.when(timerRecordRepo.findById(1L)).thenReturn(Optional.of(existingRecord));
-        Mockito.when(projectRepo.findById(1L)).thenReturn(Optional.of(existingProject));
         Mockito.when(timerRecordRepo.save(existingRecord)).thenReturn(expectedRecord);
-        assertEquals(expectedDTO, timerRecordService.removeProjectFromRecord(1L, 1L));
+        assertEquals(expectedDTO, timerRecordService.removeProjectFromRecord(1L));
     }
 
     @Test
@@ -277,7 +276,7 @@ public class TimerRecordServiceTest {
     void removeProjectFromNonExistingRecord() {
         Mockito.when(roleRepo.findByAuthority("ADMIN")).thenReturn(Optional.of(new Role(2L, "ADMIN")));
         Mockito.when(timerRecordRepo.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(TimerRecordNotFoundException.class, () -> timerRecordService.removeProjectFromRecord(1L, null));
+        assertThrows(TimerRecordNotFoundException.class, () -> timerRecordService.removeProjectFromRecord(1L));
     }
 
     @Test
@@ -293,7 +292,7 @@ public class TimerRecordServiceTest {
 
         Mockito.when(roleRepo.findByAuthority("ADMIN")).thenReturn(Optional.of(new Role(2L, "ADMIN")));
         Mockito.when(timerRecordRepo.findById(1L)).thenReturn(Optional.of(foundRecord));
-        assertThrows(AccessDeniedException.class, () -> timerRecordService.removeProjectFromRecord(1L, null));
+        assertThrows(AccessDeniedException.class, () -> timerRecordService.removeProjectFromRecord(1L));
     }
 
     @Test
