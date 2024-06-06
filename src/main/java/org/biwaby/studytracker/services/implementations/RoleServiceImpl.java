@@ -1,7 +1,7 @@
 package org.biwaby.studytracker.services.implementations;
 
 import lombok.RequiredArgsConstructor;
-import org.biwaby.studytracker.exceptions.NotFoundExceptions.RoleNotFoundException;
+import org.biwaby.studytracker.exceptions.notFoundExceptions.RoleNotFoundException;
 import org.biwaby.studytracker.models.Role;
 import org.biwaby.studytracker.repositories.RoleRepo;
 import org.biwaby.studytracker.services.interfaces.RoleService;

@@ -3,13 +3,12 @@ package org.biwaby.studytracker.services.implementations;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.biwaby.studytracker.exceptions.*;
-import org.biwaby.studytracker.exceptions.NotFoundExceptions.RoleNotFoundException;
-import org.biwaby.studytracker.exceptions.NotFoundExceptions.UserNotFoundException;
-import org.biwaby.studytracker.models.DTO.UserDTO;
-import org.biwaby.studytracker.models.DTO.UserRegistrationDTO;
+import org.biwaby.studytracker.exceptions.notFoundExceptions.RoleNotFoundException;
+import org.biwaby.studytracker.exceptions.notFoundExceptions.UserNotFoundException;
+import org.biwaby.studytracker.models.dto.UserDTO;
+import org.biwaby.studytracker.models.dto.UserRegistrationDTO;
 import org.biwaby.studytracker.models.Project;
 import org.biwaby.studytracker.models.Role;
-import org.biwaby.studytracker.models.Tag;
 import org.biwaby.studytracker.models.User;
 import org.biwaby.studytracker.repositories.*;
 import org.biwaby.studytracker.services.interfaces.UserService;
@@ -24,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +48,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @Transactional
     public UserDTO registerUser(UserRegistrationDTO dto) {
         if (dto == null) {
             throw new IncorrectUserException();
@@ -78,61 +77,29 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @Transactional
     public UserDTO grantRole(Long userId, Long roleId) {
-        Optional<User> optionalUser = userRepo.findById(userId);
-        Optional<Role> optionalRole = roleRepo.findById(roleId);
-        if (optionalUser.isPresent()) {
-            if (optionalRole.isPresent()) {
-                User user = optionalUser.get();
-                Role role = optionalRole.get();
-                user.getRoles().add(role);
+        User user = userRepo.findById(userId).orElseThrow(UserNotFoundException::new);
+        Role role = roleRepo.findById(roleId).orElseThrow(RoleNotFoundException::new);
 
-                userRepo.save(user);
-                return new UserDTO(
-                        user.getId(),
-                        user.getUsername(),
-                        user.isEnabled(),
-                        user.getRoles()
-                );
-            }
-            else {
-                throw new RoleNotFoundException();
-            }
-        }
-        else {
-            throw new UserNotFoundException();
-        }
+        user.getRoles().add(role);
+        userRepo.save(user);
+        return new UserDTO(user.getId(), user.getUsername(), user.isEnabled(), user.getRoles());
     }
 
     @Override
+    @Transactional
     public UserDTO revokeRole(Long userId, Long roleId) {
-        Optional<User> optionalUser = userRepo.findById(userId);
-        Optional<Role> optionalRole = roleRepo.findById(roleId);
-        if (optionalUser.isPresent()) {
-            if (optionalRole.isPresent()) {
-                User user = optionalUser.get();
-                Role role = optionalRole.get();
+        User user = userRepo.findById(userId).orElseThrow(UserNotFoundException::new);
+        Role role = roleRepo.findById(roleId).orElseThrow(RoleNotFoundException::new);
 
-                if (!user.getRoles().contains(role)) {
-                    throw new UserDoesNotHaveRoleException();
-                }
+        if (!user.getRoles().contains(role)) {
+            throw new UserDoesNotHaveRoleException();
+        }
 
-                user.getRoles().remove(role);
-                userRepo.save(user);
-                return new UserDTO(
-                        user.getId(),
-                        user.getUsername(),
-                        user.isEnabled(),
-                        user.getRoles()
-                );
-            }
-            else {
-                throw new RoleNotFoundException();
-            }
-        }
-        else {
-            throw new UserNotFoundException();
-        }
+        user.getRoles().remove(role);
+        userRepo.save(user);
+        return new UserDTO(user.getId(), user.getUsername(), user.isEnabled(), user.getRoles());
     }
 
     @Override

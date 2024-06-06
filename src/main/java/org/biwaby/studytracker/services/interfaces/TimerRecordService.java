@@ -1,6 +1,6 @@
 package org.biwaby.studytracker.services.interfaces;
 
-import org.biwaby.studytracker.models.DTO.TimerRecordDTO;
+import org.biwaby.studytracker.models.dto.TimerRecordDTO;
 import org.biwaby.studytracker.models.TimerRecord;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;

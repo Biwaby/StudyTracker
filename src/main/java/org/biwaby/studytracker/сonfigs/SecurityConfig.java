@@ -23,35 +23,10 @@ public class SecurityConfig {
                                 // for all
                                 .requestMatchers(HttpMethod.POST, "/users/register").permitAll()
                                 // only for authenticated users
-                                // GET
-                                .requestMatchers(HttpMethod.GET, "/timer").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/timer/**").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/projects").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/projects/**").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/tags").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/tags/**").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/summary/**").authenticated()
-                                // POST
-                                .requestMatchers(HttpMethod.POST, "/timer/record").authenticated()
-                                .requestMatchers(HttpMethod.POST, "/projects/create").authenticated()
-                                .requestMatchers(HttpMethod.POST, "/projects/tasks/add/**").authenticated()
-                                .requestMatchers(HttpMethod.POST, "/tags/add").authenticated()
-                                //PUT
-                                .requestMatchers(HttpMethod.PUT, "/timer/edit").authenticated()
-                                .requestMatchers(HttpMethod.PUT, "/timer/addTag").authenticated()
-                                .requestMatchers(HttpMethod.PUT, "/timer/removeTag").authenticated()
-                                .requestMatchers(HttpMethod.PUT, "/timer/addProject").authenticated()
-                                .requestMatchers(HttpMethod.PUT, "/timer/removeProject").authenticated()
-                                .requestMatchers(HttpMethod.PUT, "/timer/addTask").authenticated()
-                                .requestMatchers(HttpMethod.PUT, "/timer/removeTask").authenticated()
-                                .requestMatchers(HttpMethod.PUT, "/projects/edit").authenticated()
-                                .requestMatchers(HttpMethod.PUT, "/projects/tasks/edit").authenticated()
-                                .requestMatchers(HttpMethod.PUT, "/tags/edit").authenticated()
-                                //DELETE
-                                .requestMatchers(HttpMethod.DELETE, "/timer/delete").authenticated()
-                                .requestMatchers(HttpMethod.DELETE, "/projects/delete").authenticated()
-                                .requestMatchers(HttpMethod.DELETE, "/projects/tasks/delete").authenticated()
-                                .requestMatchers(HttpMethod.DELETE, "/tags/delete").authenticated()
+                                .requestMatchers("/timer/**").authenticated()
+                                .requestMatchers("/projects/**").authenticated()
+                                .requestMatchers("/tags/**").authenticated()
+                                .requestMatchers("/summary/**").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, "/users/delete").authenticated()
                                 // only fon admin users
                                 .requestMatchers("/admin/**").hasAuthority("ADMIN")

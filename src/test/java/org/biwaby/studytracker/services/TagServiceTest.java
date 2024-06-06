@@ -1,7 +1,7 @@
 package org.biwaby.studytracker.services;
 
-import org.biwaby.studytracker.exceptions.NotFoundExceptions.TagNotFoundException;
-import org.biwaby.studytracker.models.DTO.TagDTO;
+import org.biwaby.studytracker.exceptions.notFoundExceptions.TagNotFoundException;
+import org.biwaby.studytracker.models.dto.TagDTO;
 import org.biwaby.studytracker.models.Role;
 import org.biwaby.studytracker.models.Tag;
 import org.biwaby.studytracker.models.User;

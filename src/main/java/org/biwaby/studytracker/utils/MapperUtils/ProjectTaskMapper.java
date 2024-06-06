@@ -1,6 +1,6 @@
 package org.biwaby.studytracker.utils.MapperUtils;
 
-import org.biwaby.studytracker.models.DTO.ProjectTaskDTO;
+import org.biwaby.studytracker.models.dto.ProjectTaskDTO;
 import org.biwaby.studytracker.models.ProjectTask;
 import org.springframework.stereotype.Service;
 

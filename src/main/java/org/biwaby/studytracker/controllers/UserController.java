@@ -1,8 +1,8 @@
 package org.biwaby.studytracker.controllers;
 
 import lombok.AllArgsConstructor;
-import org.biwaby.studytracker.models.DTO.UserDTO;
-import org.biwaby.studytracker.models.DTO.UserRegistrationDTO;
+import org.biwaby.studytracker.models.dto.UserDTO;
+import org.biwaby.studytracker.models.dto.UserRegistrationDTO;
 import org.biwaby.studytracker.services.interfaces.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +15,12 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    ResponseEntity<UserDTO> registerUser(@RequestBody UserRegistrationDTO dto) {
+    public ResponseEntity<UserDTO> registerUser(@RequestBody UserRegistrationDTO dto) {
         return ResponseEntity.ok(userService.registerUser(dto));
     }
 
     @DeleteMapping("/delete")
-    ResponseEntity<Void> deleteUser() {
+    public ResponseEntity<Void> deleteUser() {
         userService.deleteUser();
         return ResponseEntity.ok().build();
     }

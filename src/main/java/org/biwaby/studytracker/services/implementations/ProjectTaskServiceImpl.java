@@ -2,9 +2,9 @@ package org.biwaby.studytracker.services.implementations;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.biwaby.studytracker.exceptions.NotFoundExceptions.ProjectNotFoundException;
-import org.biwaby.studytracker.exceptions.NotFoundExceptions.ProjectTaskNotFoundException;
-import org.biwaby.studytracker.models.DTO.ProjectTaskDTO;
+import org.biwaby.studytracker.exceptions.notFoundExceptions.ProjectNotFoundException;
+import org.biwaby.studytracker.exceptions.notFoundExceptions.ProjectTaskNotFoundException;
+import org.biwaby.studytracker.models.dto.ProjectTaskDTO;
 import org.biwaby.studytracker.models.Project;
 import org.biwaby.studytracker.models.ProjectTask;
 import org.biwaby.studytracker.models.Role;

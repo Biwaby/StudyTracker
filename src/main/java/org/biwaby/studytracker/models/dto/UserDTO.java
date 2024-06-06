@@ -1,4 +1,4 @@
-package org.biwaby.studytracker.models.DTO;
+package org.biwaby.studytracker.models.dto;
 
 import lombok.Value;
 import org.biwaby.studytracker.models.Role;

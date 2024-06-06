@@ -1,9 +1,9 @@
 package org.biwaby.studytracker.services;
 
-import org.biwaby.studytracker.exceptions.NotFoundExceptions.ProjectNotFoundException;
-import org.biwaby.studytracker.exceptions.NotFoundExceptions.ProjectTaskNotFoundException;
+import org.biwaby.studytracker.exceptions.notFoundExceptions.ProjectNotFoundException;
+import org.biwaby.studytracker.exceptions.notFoundExceptions.ProjectTaskNotFoundException;
 import org.biwaby.studytracker.models.*;
-import org.biwaby.studytracker.models.DTO.ProjectTaskDTO;
+import org.biwaby.studytracker.models.dto.ProjectTaskDTO;
 import org.biwaby.studytracker.repositories.*;
 import org.biwaby.studytracker.services.implementations.ProjectTaskServiceImpl;
 import org.biwaby.studytracker.services.implementations.UserServiceImpl;

@@ -1,11 +1,11 @@
 package org.biwaby.studytracker.services;
 
-import org.biwaby.studytracker.exceptions.NotFoundExceptions.TimerRecordNotFoundException;
-import org.biwaby.studytracker.exceptions.NotFoundExceptions.UserNotFoundException;
+import org.biwaby.studytracker.exceptions.notFoundExceptions.TimerRecordNotFoundException;
+import org.biwaby.studytracker.exceptions.notFoundExceptions.UserNotFoundException;
 import org.biwaby.studytracker.models.*;
-import org.biwaby.studytracker.models.DTO.ProjectDTO;
-import org.biwaby.studytracker.models.DTO.TagDTO;
-import org.biwaby.studytracker.models.DTO.TimerRecordDTO;
+import org.biwaby.studytracker.models.dto.ProjectDTO;
+import org.biwaby.studytracker.models.dto.TagDTO;
+import org.biwaby.studytracker.models.dto.TimerRecordDTO;
 import org.biwaby.studytracker.repositories.*;
 import org.biwaby.studytracker.services.implementations.TimerRecordServiceImpl;
 import org.biwaby.studytracker.services.implementations.UserServiceImpl;

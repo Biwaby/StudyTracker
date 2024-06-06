@@ -1,9 +1,8 @@
 package org.biwaby.studytracker.controllers;
 
 import lombok.AllArgsConstructor;
-import org.biwaby.studytracker.models.DTO.ProjectTaskDTO;
+import org.biwaby.studytracker.models.dto.ProjectTaskDTO;
 import org.biwaby.studytracker.services.interfaces.ProjectTaskService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +16,7 @@ public class ProjectTaskController {
     private final ProjectTaskService projectTaskService;
 
     @GetMapping
-    ResponseEntity<List<ProjectTaskDTO>> getAllTasksFromProject(@RequestParam Long projectId) {
+    public ResponseEntity<List<ProjectTaskDTO>> getAllTasksFromProject(@RequestParam Long projectId) {
         return ResponseEntity.ok(projectTaskService.getAllTasksFromProject(projectId));
     }
 

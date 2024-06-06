@@ -14,7 +14,6 @@ import java.util.List;
 
 public interface TimerRecordRepo extends PagingAndSortingRepository<TimerRecord, Long>, JpaRepository<TimerRecord, Long> {
     Page<TimerRecord> findAllByUser(Pageable pageable, User user);
-    List<TimerRecord> findAllByUser(User user);
     List<TimerRecord> findAllByProject(Project project);
     List<TimerRecord> findAllByRecordDateAndUser(Date date, User user);
     void deleteAllByUser(User user);

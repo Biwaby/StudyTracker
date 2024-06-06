@@ -1,4 +1,4 @@
-package org.biwaby.studytracker.exceptions.NotFoundExceptions;
+package org.biwaby.studytracker.exceptions.notFoundExceptions;
 
 public class TagNotFoundException extends RuntimeException{
 }

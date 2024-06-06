@@ -1,7 +1,7 @@
 package org.biwaby.studytracker.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.biwaby.studytracker.models.DTO.ProjectDTO;
+import org.biwaby.studytracker.models.dto.ProjectDTO;
 import org.biwaby.studytracker.models.Project;
 import org.biwaby.studytracker.models.Role;
 import org.biwaby.studytracker.models.User;

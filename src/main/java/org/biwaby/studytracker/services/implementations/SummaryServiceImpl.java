@@ -2,10 +2,10 @@ package org.biwaby.studytracker.services.implementations;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.biwaby.studytracker.exceptions.NotFoundExceptions.ProjectNotFoundException;
+import org.biwaby.studytracker.exceptions.notFoundExceptions.ProjectNotFoundException;
 import org.biwaby.studytracker.models.*;
-import org.biwaby.studytracker.models.DTO.DateSummaryDTO;
-import org.biwaby.studytracker.models.DTO.ProjectSummaryDTO;
+import org.biwaby.studytracker.models.dto.DateSummaryDTO;
+import org.biwaby.studytracker.models.dto.ProjectSummaryDTO;
 import org.biwaby.studytracker.repositories.ProjectRepo;
 import org.biwaby.studytracker.repositories.RoleRepo;
 import org.biwaby.studytracker.repositories.TimerRecordRepo;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,107 +29,72 @@ public class SummaryServiceImpl implements SummaryService {
 
     @Override
     @Transactional
-    public DateSummaryDTO getDateSummary(Date date) {
+    public DateSummaryDTO getSummary(Date date) {
         List<TimerRecord> recordList = timerRecordRepo.findAllByRecordDateAndUser(date, userService.getUserByAuth());
         DateSummaryDTO dto = new DateSummaryDTO();
 
-        // Total time
+        // Calc total time
         Date totalTime = new Date();
-        long duration = 0;
-        for (TimerRecord record : recordList) {
-            duration += (record.getEndTime().getTime()) - (record.getStartTime().getTime());
-        }
+        long duration = recordList.stream().mapToLong(record -> record.getEndTime().getTime() - record.getStartTime().getTime()).sum();
         totalTime.setTime(duration - 10800000);
         dto.setTotalTime(new SimpleDateFormat("HH:mm:ss").format(totalTime));
 
-        // Top project
-        Map<Project, Integer> countMap = new HashMap<>();
-        for (TimerRecord record : recordList) {
-            Project project = record.getProject();
-            if (project != null) {
-                countMap.put(project, countMap.getOrDefault(project, 0) + 1);
-            }
-        }
-        Project topProject = null;
-        int maxCount = 0;
-        for (Map.Entry<Project, Integer> entry : countMap.entrySet()) {
-            if (entry.getValue() > maxCount) {
-                maxCount = entry.getValue();
-                topProject = entry.getKey();
-            }
-        }
+        // Find top project
+        Map<Project, Long> countMap = recordList.stream()
+                .filter(record -> record.getProject() != null)
+                .collect(Collectors.groupingBy(TimerRecord::getProject, Collectors.counting()));
+        Project topProject = countMap.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse(null);
 
-        // Top project total time
+        // Calc top project total time
         Date topProjectTime = new Date();
-        long topProjectDur = 0;
-        for (TimerRecord record : recordList) {
-            if (record.getProject() != null && record.getProject().equals(topProject)) {
-                topProjectDur += record.getEndTime().getTime() - record.getStartTime().getTime();
-            }
-        }
-        if (topProjectDur == 0) {
-            dto.setTopProject("-");
-        }
-        else {
+        long topProjectDur = recordList.stream()
+                .filter(record -> record.getProject() != null && record.getProject().equals(topProject))
+                .mapToLong(record -> record.getEndTime().getTime() - record.getStartTime().getTime()).sum();
+        if (topProjectDur != 0) {
             topProjectTime.setTime(topProjectDur - 10800000);
             dto.setTopProject(topProject.getTitle());
             dto.setTopProjectTotalTime(new SimpleDateFormat("HH:mm:ss").format(topProjectTime));
         }
 
-        // Project-project time list with tasks + without projects total time
-        Date withoutProjectTime = new Date();
-        long withoutProjectDur = 0;
+        // Find all tasks for each project and calc total time
         Map<Project, Long> projectTime = new HashMap<>();
         Map<ProjectTask, Long> projectTaskTime = new HashMap<>();
-        for (TimerRecord record : recordList) {
+
+        recordList.forEach(record -> {
             if (record.getProject() != null) {
                 Project project = record.getProject();
                 long projectTotalTime = record.getEndTime().getTime() - record.getStartTime().getTime();
-
-                if (projectTime.containsKey(project)) {
-                    long sum = projectTime.get(project);
-                    projectTime.put(project, sum + projectTotalTime);
-                }
-                else {
-                    projectTime.put(project, projectTotalTime);
-                }
+                projectTime.merge(project, projectTotalTime, Long::sum);
 
                 if (record.getProjectTask() != null) {
                     ProjectTask task = record.getProjectTask();
                     long taskTotalTime = record.getEndTime().getTime() - record.getStartTime().getTime();
-
-                    if (projectTaskTime.containsKey(task)) {
-                        long sum = projectTaskTime.get(task);
-                        projectTaskTime.put(task, sum + taskTotalTime);
-                    }
-                    else {
-                        projectTaskTime.put(task, taskTotalTime);
-                    }
+                    projectTaskTime.merge(task, taskTotalTime, Long::sum);
                 }
             }
-            else {
-                withoutProjectDur += (record.getEndTime().getTime()) - (record.getStartTime().getTime());
-            }
-        }
+        });
 
-        for (Map.Entry<Project, Long> entry : projectTime.entrySet()) {
-            List<String> tasksList = new ArrayList<>();
-            Date totalProjectTime = new Date();
-            totalProjectTime.setTime(entry.getValue() - 10800000);
+        projectTime.forEach((project, projectTotalTime) -> {
+            List<String> tasksList = projectTaskTime.entrySet().stream()
+                    .filter(entry -> entry.getKey().getProject().equals(project))
+                    .map(entry -> entry.getKey().getTitle() + ": " + new SimpleDateFormat("HH:mm:ss").format(entry.getValue() - 10800000))
+                    .toList();
 
-            for (Map.Entry<ProjectTask, Long> taskEntry : projectTaskTime.entrySet()) {
-                if (taskEntry.getKey().getProject().equals(entry.getKey())) {
-                    Date totalTaskTime = new Date();
-                    totalTaskTime.setTime(taskEntry.getValue() - 10800000);
-                    tasksList.add(taskEntry.getKey().getTitle() + ": " + new SimpleDateFormat("HH:mm:ss").format(totalTaskTime));
-                }
-            }
             dto.getProjects().put(
-                    entry.getKey().getTitle() + ": " + new SimpleDateFormat("HH:mm:ss").format(totalProjectTime),
+                    project.getTitle() + ": " + new SimpleDateFormat("HH:mm:ss").format(projectTotalTime - 10800000),
                     tasksList
             );
-        }
+        });
 
+        // Calc total time without projects
+        Date withoutProjectTime = new Date();
+        long withoutProjectDur = recordList.stream()
+                .collect(Collectors.partitioningBy(record -> record.getProject() == null))
+                .get(true).stream()
+                .mapToLong(record -> record.getEndTime().getTime() - record.getStartTime().getTime()).sum();
         withoutProjectTime.setTime(withoutProjectDur - 10800000);
         dto.setWithoutProjectsTotalTime(new SimpleDateFormat("HH:mm:ss").format(withoutProjectTime));
 
@@ -149,72 +115,39 @@ public class SummaryServiceImpl implements SummaryService {
         List<TimerRecord> recordList = timerRecordRepo.findAllByProject(project);
         ProjectSummaryDTO dto = new ProjectSummaryDTO();
 
-        // Total time
+        // Calc project total time
         Date totalTime = new Date();
-        long duration = 0;
-        for (TimerRecord record : recordList) {
-            duration += (record.getEndTime().getTime()) - (record.getStartTime().getTime());
-        }
+        long duration = recordList.stream()
+                .mapToLong(record -> record.getEndTime().getTime() - record.getStartTime().getTime()).sum();
         totalTime.setTime(duration - 10800000);
         dto.setTotalTime(new SimpleDateFormat("HH:mm:ss").format(totalTime));
 
-        // Top task
-        Map<ProjectTask, Integer> countMap = new HashMap<>();
-        for (TimerRecord record : recordList) {
-            ProjectTask task = record.getProjectTask();
-            if (task != null) {
-                countMap.put(task, countMap.getOrDefault(task, 0) + 1);
-            }
-        }
-        ProjectTask topTask = null;
-        int maxCount = 0;
-        for (Map.Entry<ProjectTask, Integer> entry : countMap.entrySet()) {
-            if (entry.getValue() > maxCount) {
-                maxCount = entry.getValue();
-                topTask = entry.getKey();
-            }
-        }
+        // Find top task
+        Map<ProjectTask, Long> taskTimeMap = recordList.stream()
+                .filter(record -> record.getProjectTask() != null)
+                .collect(
+                        Collectors.groupingBy(
+                                TimerRecord::getProjectTask,
+                                Collectors.summingLong(record -> record.getEndTime().getTime() - record.getStartTime().getTime())
+                        )
+                );
 
-        // Top task total time
+        ProjectTask topTask = taskTimeMap.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse(null);
+
+        // Calc top task total time
         Date topTaskTime = new Date();
-        long topTaskDur = 0;
-        for (TimerRecord record : recordList) {
-            if (record.getProjectTask() != null && record.getProjectTask().equals(topTask)) {
-                topTaskDur += record.getEndTime().getTime() - record.getStartTime().getTime();
-            }
-        }
-        if (topTaskDur == 0) {
-            dto.setTopTask("-");
-        }
-        else {
+        long topTaskDur = taskTimeMap.getOrDefault(topTask, 0L);
+        if (topTaskDur != 0) {
             topTaskTime.setTime(topTaskDur - 10800000);
             dto.setTopTask(topTask.getTitle());
             dto.setTopTaskTotalTime(new SimpleDateFormat("HH:mm:ss").format(topTaskTime));
         }
 
-        // Task - total time list + with tasks total time
-        Date withoutTaskTime = new Date();
-        long withoutTaskDur = 0;
-        Map<ProjectTask, Long> projectTaskLongMap = new HashMap<>();
-        for (TimerRecord record : recordList) {
-            if (record.getProjectTask() != null) {
-                ProjectTask task = record.getProjectTask();
-                long taskTotalTime = record.getEndTime().getTime() - record.getStartTime().getTime();
-
-                if (projectTaskLongMap.containsKey(task)) {
-                    long sum = projectTaskLongMap.get(task);
-                    projectTaskLongMap.put(task, sum + taskTotalTime);
-                }
-                else {
-                    projectTaskLongMap.put(task, taskTotalTime);
-                }
-            }
-            else {
-                withoutTaskDur += record.getEndTime().getTime() - record.getStartTime().getTime();
-            }
-        }
-
-        for (Map.Entry<ProjectTask, Long> entry : projectTaskLongMap.entrySet()) {
+        // Find all tasks and calc total time
+        for (Map.Entry<ProjectTask, Long> entry : taskTimeMap.entrySet()) {
             Date totalTaskTime = new Date();
             totalTaskTime.setTime(entry.getValue() - 10800000);
 
@@ -224,6 +157,12 @@ public class SummaryServiceImpl implements SummaryService {
             );
         }
 
+        // Calc total time without tasks
+        Date withoutTaskTime = new Date();
+        long withoutTaskDur = recordList.stream()
+                .collect(Collectors.partitioningBy(record -> record.getProjectTask() == null))
+                .get(true).stream()
+                .mapToLong(record -> record.getEndTime().getTime() - record.getStartTime().getTime()).sum();
         withoutTaskTime.setTime(withoutTaskDur - 10800000);
         dto.setWithoutTasksTotalTime(new SimpleDateFormat("HH:mm:ss").format(withoutTaskTime));
 

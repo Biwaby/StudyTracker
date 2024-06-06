@@ -1,6 +1,6 @@
 package org.biwaby.studytracker.services.interfaces;
 
-import org.biwaby.studytracker.models.DTO.ProjectTaskDTO;
+import org.biwaby.studytracker.models.dto.ProjectTaskDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package org.biwaby.studytracker.controllers;
 
 import lombok.AllArgsConstructor;
-import org.biwaby.studytracker.models.DTO.ProjectDTO;
+import org.biwaby.studytracker.models.dto.ProjectDTO;
 import org.biwaby.studytracker.services.interfaces.ProjectService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @GetMapping
-    ResponseEntity<List<ProjectDTO>> getAllProjects() {
+    public ResponseEntity<List<ProjectDTO>> getAllProjects() {
         return ResponseEntity.ok(projectService.getAllProjects());
     }
 
